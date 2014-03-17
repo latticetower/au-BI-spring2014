@@ -41,47 +41,61 @@ class HtData < Mustache
     @t = 0
     
   end
+  
+  def rounded(data_hash)
+    pc = {}
+    data_hash.keys.each do |key|
+      pc[key] = data_hash[key].map{|value| value.round(PRECISION) }
+    end
+    pc
+  end
+  
   def normalized_positions
     @normalized_positions ||= {
-      'a' => Array.new(21) { |i| (1.0 * nucleotide_positions['a'][i]/nucleotide_positions['sum'][i]).round(PRECISION) }, 
-      'c' => Array.new(21) { |i| (1.0 * nucleotide_positions['c'][i]/nucleotide_positions['sum'][i]).round(PRECISION) }, 
-      'g' => Array.new(21) { |i| (1.0 * nucleotide_positions['g'][i]/nucleotide_positions['sum'][i]).round(PRECISION) }, 
-      't' => Array.new(21) { |i| (1.0 * nucleotide_positions['t'][i]/nucleotide_positions['sum'][i]).round(PRECISION) },
+      'a' => Array.new(21) { |i| (1.0 * nucleotide_positions['a'][i]/nucleotide_positions['sum'][i]) }, 
+      'c' => Array.new(21) { |i| (1.0 * nucleotide_positions['c'][i]/nucleotide_positions['sum'][i]) }, 
+      'g' => Array.new(21) { |i| (1.0 * nucleotide_positions['g'][i]/nucleotide_positions['sum'][i]) }, 
+      't' => Array.new(21) { |i| (1.0 * nucleotide_positions['t'][i]/nucleotide_positions['sum'][i]) },
+      'sum' => Array.new(21) {|i| 1.0 },
       'pos' => Array.new(21) {|i| i + 1}
     }
-    @normalized_positions
+    
+    rounded(@normalized_positions)
   end
   
   def pseudo_counts
+    normalized_positions if @normalized_positions.nil?
+    k = 1.0
     @pseudo_counts ||= {
-      'a' => Array.new(21) { |i| ((1.0/4 + nucleotide_positions['a'][i])/(nucleotide_positions['sum'][i] + 1)).round(PRECISION) }, 
-      'c' => Array.new(21) { |i| ((1.0/4 + nucleotide_positions['c'][i])/(nucleotide_positions['sum'][i] + 1)).round(PRECISION) }, 
-      'g' => Array.new(21) { |i| ((1.0/4 + nucleotide_positions['g'][i])/(nucleotide_positions['sum'][i] + 1)).round(PRECISION) }, 
-      't' => Array.new(21) { |i| ((1.0/4 + nucleotide_positions['t'][i])/(nucleotide_positions['sum'][i] + 1)).round(PRECISION) },
+      'a' => Array.new(21) { |i| ((pa*k + @normalized_positions['a'][i])/(@normalized_positions['sum'][i] + k)) }, 
+      'c' => Array.new(21) { |i| ((pc*k + @normalized_positions['c'][i])/(@normalized_positions['sum'][i] + k)) }, 
+      'g' => Array.new(21) { |i| ((pg*k + @normalized_positions['g'][i])/(@normalized_positions['sum'][i] + k)) }, 
+      't' => Array.new(21) { |i| ((pt*k + @normalized_positions['t'][i])/(@normalized_positions['sum'][i] + k)) },
       'pos' => Array.new(21) {|i| i + 1}
     }
-    @pseudo_counts
+    rounded(@pseudo_counts)
   end
   
   def pssm
+    pseudo_counts unless @pseudo_counts
     @pssm ||= {
-      'a' => Array.new(21) { |i| (Math.log(pseudo_counts['a'][i] / pa)).round(PRECISION) }, 
-      'c' => Array.new(21) { |i| (Math.log(pseudo_counts['c'][i] / pc)).round(PRECISION) }, 
-      'g' => Array.new(21) { |i| (Math.log(pseudo_counts['g'][i] / pg)).round(PRECISION) }, 
-      't' => Array.new(21) { |i| (Math.log(pseudo_counts['t'][i] / pt)).round(PRECISION) },
-      'sum' => Array.new(21) {|i| (Math.log(pseudo_counts['a'][i] / pa) + 
-                                  Math.log(pseudo_counts['c'][i] / pc) + 
-                                  Math.log(pseudo_counts['g'][i] / pg) + 
-                                  Math.log(pseudo_counts['t'][i] / pt)).round(PRECISION)
+      'a' => Array.new(21) { |i| (Math.log(@pseudo_counts['a'][i] / @pa)) }, 
+      'c' => Array.new(21) { |i| (Math.log(@pseudo_counts['c'][i] / @pc)) }, 
+      'g' => Array.new(21) { |i| (Math.log(@pseudo_counts['g'][i] / @pg)) }, 
+      't' => Array.new(21) { |i| (Math.log(@pseudo_counts['t'][i] / @pt)) },
+      'sum' => Array.new(21) {|i| (Math.log(@pseudo_counts['a'][i] / @pa) + 
+                                  Math.log(@pseudo_counts['c'][i] / @pc) + 
+                                  Math.log(@pseudo_counts['g'][i] / @pg) + 
+                                  Math.log(@pseudo_counts['t'][i] / @pt))
                               },
       'pos' => Array.new(21) {|i| i + 1}
     }
-    @pssm
+    rounded(@pssm)
   end
   
   def psum
-    @psum ||= pa + pc + pg + pt
-    @psum
+    @psum ||= @pa + @pc + @pg + @pt
+    @psum.round(PRECISION)
   end
   
   def sum1
@@ -92,9 +106,9 @@ class HtData < Mustache
   ['a', 'c', 'g', 't'].each do |letter|     
     define_method "p#{letter}".to_sym do
       unless instance_variable_defined? "@p#{letter}"
-        instance_variable_set("@p#{letter}", (1.0*send(letter) / sum1).round(PRECISION) )
+        instance_variable_set("@p#{letter}", (1.0*send(letter) / sum1) )
       end
-      instance_variable_get("@p#{letter}")
+      instance_variable_get("@p#{letter}").round(PRECISION)
     end
   end
 end

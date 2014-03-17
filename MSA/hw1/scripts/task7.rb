@@ -58,7 +58,7 @@ end
 results_array2 = Array.new
 p = {}
 @probabilities.keys.each do |key|
-  p[key] = (100000*@probabilities[key]).round
+  p[key] = (100500*@probabilities[key]).round
 end
 test_seq = Bio::Sequence::NA.randomize(p)
 
