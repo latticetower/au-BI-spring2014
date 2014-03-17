@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" font-size="10px" font-family="sans-serif" fill="none" stroke="none" stroke-width="1.5" width="980" height="785">
+     <g transform="translate(100,5)">
+          <g transform="translate(10,20)">
+               <text pointer-events="none" y="3" dy=".71em" transform="translate(100,5)" fill="rgb(0,0,0)" text-anchor="middle">scores with given probabilities distribution</text>
+          </g>
+          <g transform="translate(10,20)">
+               <text pointer-events="none" x="3" dy=".35em" transform="translate(5,100)" fill="rgb(0,0,0)">Number of strings</text>
+          </g>
+          <g transform="translate(10,20)">
+               <text pointer-events="none" y="-3" transform="translate(400.0,700)" fill="rgb(0,0,0)" text-anchor="middle">score (rounded)</text>
+          </g>
+          <g transform="translate(10,20)">
+               <line shape-rendering="crispEdges" x1="729.4117647058823" y1="0" x2="729.4117647058823" y2="710" stroke="rgb(128,128,128)" stroke-opacity="0.2" stroke-width="1"/>
+          </g>
+          <g transform="translate(10,20)">
+               <text pointer-events="none" y="3" dy=".71em" transform="translate(729.4117647058823,710)" fill="rgb(0,0,0)" text-anchor="middle">5</text>
+          </g>
+          <g transform="translate(10,20)">
+               <line shape-rendering="crispEdges" x1="23.52941176470588" y1="0" x2="23.52941176470588" y2="710" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="141.1764705882353" y1="0" x2="141.1764705882353" y2="710" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="258.8235294117647" y1="0" x2="258.8235294117647" y2="710" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="376.4705882352941" y1="0" x2="376.4705882352941" y2="710" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="494.11764705882354" y1="0" x2="494.11764705882354" y2="710" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="611.7647058823529" y1="0" x2="611.7647058823529" y2="710" stroke="rgb(0,0,0)" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="729.4117647058823" y1="0" x2="729.4117647058823" y2="710" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+          </g>
+          <g transform="translate(10,20)">
+               <line shape-rendering="crispEdges" x1="0" y1="623.1285039023854" x2="800" y2="623.1285039023854" stroke="rgb(128,128,128)" stroke-opacity="0.2" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="546.1800593602286" x2="800" y2="546.1800593602286" stroke="rgb(128,128,128)" stroke-opacity="0.2" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="469.2316148180719" x2="800" y2="469.2316148180719" stroke="rgb(128,128,128)" stroke-opacity="0.2" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="392.28317027591515" x2="800" y2="392.28317027591515" stroke="rgb(128,128,128)" stroke-opacity="0.2" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="315.3347257337584" x2="800" y2="315.3347257337584" stroke="rgb(128,128,128)" stroke-opacity="0.2" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="238.3862811916016" x2="800" y2="238.3862811916016" stroke="rgb(128,128,128)" stroke-opacity="0.2" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="161.43783664944488" x2="800" y2="161.43783664944488" stroke="rgb(128,128,128)" stroke-opacity="0.2" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="84.48939210728815" x2="800" y2="84.48939210728815" stroke="rgb(128,128,128)" stroke-opacity="0.2" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="7.540947565131319" x2="800" y2="7.540947565131319" stroke="rgb(128,128,128)" stroke-opacity="0.2" stroke-width="1"/>
+          </g>
+          <g transform="translate(10,20)">
+               <text pointer-events="none" x="-3" dy=".35em" transform="translate(0,623.1285039023854)" fill="rgb(0,0,0)" text-anchor="end">1,000</text>
+               <text pointer-events="none" x="-3" dy=".35em" transform="translate(0,546.1800593602286)" fill="rgb(0,0,0)" text-anchor="end">2,000</text>
+               <text pointer-events="none" x="-3" dy=".35em" transform="translate(0,469.2316148180719)" fill="rgb(0,0,0)" text-anchor="end">3,000</text>
+               <text pointer-events="none" x="-3" dy=".35em" transform="translate(0,392.28317027591515)" fill="rgb(0,0,0)" text-anchor="end">4,000</text>
+               <text pointer-events="none" x="-3" dy=".35em" transform="translate(0,315.3347257337584)" fill="rgb(0,0,0)" text-anchor="end">5,000</text>
+               <text pointer-events="none" x="-3" dy=".35em" transform="translate(0,238.3862811916016)" fill="rgb(0,0,0)" text-anchor="end">6,000</text>
+               <text pointer-events="none" x="-3" dy=".35em" transform="translate(0,161.43783664944488)" fill="rgb(0,0,0)" text-anchor="end">7,000</text>
+               <text pointer-events="none" x="-3" dy=".35em" transform="translate(0,84.48939210728815)" fill="rgb(0,0,0)" text-anchor="end">8,000</text>
+               <text pointer-events="none" x="-3" dy=".35em" transform="translate(0,7.540947565131319)" fill="rgb(0,0,0)" text-anchor="end">9,000</text>
+          </g>
+          <g transform="translate(10,20)">
+               <line shape-rendering="crispEdges" x1="0" y1="0" x2="0" y2="623.1285039023854" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="0" x2="0" y2="546.1800593602286" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="0" x2="0" y2="469.2316148180719" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="0" x2="0" y2="392.28317027591515" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="0" x2="0" y2="315.3347257337584" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="0" x2="0" y2="238.3862811916016" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="0" x2="0" y2="161.43783664944488" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="0" x2="0" y2="84.48939210728815" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+               <line shape-rendering="crispEdges" x1="0" y1="0" x2="0" y2="7.540947565131319" stroke="rgb(255,255,255)" stroke-opacity="0.3" stroke-width="1"/>
+          </g>
+          <g transform="translate(10,20)">
+               <path d="M0.0,700.0L23.52941176470588,698.9227217764098L47.05882352941176,689.688908431351L70.58823529411765,659.4481697262834L94.11764705882352,579.9604265142355L117.64705882352942,456.99681213586894L141.1764705882353,319.566890183577L164.70588235294116,247.3123007584918L188.23529411764704,254.54545454545456L211.76470588235296,322.9526217434319L235.29411764705884,383.20325381994064L258.8235294117647,337.5728262064417L282.3529411764706,196.98801802792133L305.88235294117646,44.937891612619524L329.4117647058823,0.0L352.94117647058823,93.6462570078047L376.4705882352941,255.3149389908761L400.0,399.1315818401671L423.5294117647059,464.9994503682533L447.05882352941177,446.9165659008464L470.5882352941177,393.5912938331318L494.11764705882354,408.1345498515994L517.6470588235294,460.07474991755527L541.1764705882354,545.5644718038914L564.7058823529412,610.8937012201825L588.2352941176471,663.6803341761021L611.7647058823529,676.3768275255579L635.2941176470588,677.2232604155216L658.8235294117646,673.452786632956L682.3529411764706,676.1459821919314L705.8823529411765,679.9934044190393L729.4117647058823,689.4580630977246L752.9411764705882,696.07562932835L776.4705882352941,698.999670220952L800.0,699.9230515554578" fill="none" stroke="rgb(173,216,230)" stroke-dasharray="" stroke-width="2"/>
+          </g>
+          <g transform="translate(10,20)">
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="0.0" cy="700.0" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="23.52941176470588" cy="698.9227217764098" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="47.05882352941176" cy="689.688908431351" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="70.58823529411765" cy="659.4481697262834" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="94.11764705882352" cy="579.9604265142355" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="117.64705882352942" cy="456.99681213586894" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="141.1764705882353" cy="319.566890183577" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="164.70588235294116" cy="247.3123007584918" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="188.23529411764704" cy="254.54545454545456" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="211.76470588235296" cy="322.9526217434319" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="235.29411764705884" cy="383.20325381994064" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="258.8235294117647" cy="337.5728262064417" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="282.3529411764706" cy="196.98801802792133" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="305.88235294117646" cy="44.937891612619524" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="329.4117647058823" cy="0.0" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="352.94117647058823" cy="93.6462570078047" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="376.4705882352941" cy="255.3149389908761" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="400.0" cy="399.1315818401671" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="423.5294117647059" cy="464.9994503682533" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="447.05882352941177" cy="446.9165659008464" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="470.5882352941177" cy="393.5912938331318" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="494.11764705882354" cy="408.1345498515994" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="517.6470588235294" cy="460.07474991755527" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="541.1764705882354" cy="545.5644718038914" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="564.7058823529412" cy="610.8937012201825" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="588.2352941176471" cy="663.6803341761021" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="611.7647058823529" cy="676.3768275255579" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="635.2941176470588" cy="677.2232604155216" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="658.8235294117646" cy="673.452786632956" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="682.3529411764706" cy="676.1459821919314" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="705.8823529411765" cy="679.9934044190393" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="729.4117647058823" cy="689.4580630977246" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="752.9411764705882" cy="696.07562932835" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="776.4705882352941" cy="698.999670220952" r="1.0"/>
+               <circle fill="rgb(255,165,0)" fill-opacity="0.5" stroke="rgb(255,165,0)" stroke-width="1" cx="800.0" cy="699.9230515554578" r="1.0"/>
+          </g>
+     </g>
+</svg>
