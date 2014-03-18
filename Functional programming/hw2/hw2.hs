@@ -62,4 +62,4 @@ max_len (Cons _ xs) = 1 + max (max_len (fst xs)) (max_len (snd xs))
 max_len  Empty        = 0
 -- max_len (1 `Cons` (2 `Cons` ((3 `Cons` (Empty, Empty)), Empty), Empty)) - например, возвращает 3
 
-doubleElems a = [x*2 | x<-a]
+getElemPosition a = zip [1..] a 
