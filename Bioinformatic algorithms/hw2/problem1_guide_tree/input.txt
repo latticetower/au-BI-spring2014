@@ -1,0 +1,6 @@
+>seq1
+ac
+>seq2
+aa
+>seq3
+tt

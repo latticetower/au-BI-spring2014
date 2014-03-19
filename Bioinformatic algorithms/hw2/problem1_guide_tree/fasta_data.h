@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 
+typedef std::vector<std::pair<std::string, std::string> > FastaArray;
 /* this struct should contain basic fasta reading functionality*/
 struct FastaData{
   std::vector <std::pair<std::string, std::string> > data;
