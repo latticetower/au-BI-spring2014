@@ -10,7 +10,7 @@ public:
 
   } 
   void visit(Leaf const* leaf) {
-    std::cout << fasta_data->data[leaf->get()].first << ", " << fasta_data->data[leaf->get()].second << std::endl;
+    std::cout << fasta_data->data[leaf->getIndex()].first << ", " << fasta_data->data[leaf->getIndex()].second << std::endl;
   }
 
   void visit(Node const* node) {

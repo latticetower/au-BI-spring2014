@@ -3,6 +3,17 @@
 #include <algorithm>
 /* this file contains helper function for computations */
 
+struct pair_less_comparator {
+  bool operator() (std::pair<int, int> const & a, std::pair<int, int> const & b) const
+  {
+    if (a.first != b.first){
+      return a.first < b.first;
+    }
+    return a.second < b.second;
+  }
+};
+
+
 int cost(char a, char b) {
   if (a == b) 
     return 0;
