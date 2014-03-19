@@ -85,19 +85,23 @@ public:
 
   void Build() {
     PrepareLeaves();
-    //в цикле:
-    //1. строим Q, возвращаем пару вершин до которых минимальное рассто€ние
+    
     for (size_t i = 0 ; i < fasta_data->data.size() - 1; i++) {
+      //1. build Q matrix (in helper function), get pair with minimal weight
       std::pair<int, int> min_pair = getMinPairFromQMatrix();
-      //3. добавл€ем новую вершину, €вл€ющуюс€ объединением старых, в список
+
+      //2. add new vertex to _nodes vector
       int u = _nodes.size();
       _nodes.push_back(std::shared_ptr<TreeElement>(new Node(u, _nodes[min_pair.first], _nodes[min_pair.second])));
+      // compute distances for each of 2 joined vertices to new vertex
       pair_distances[std::pair<int, int>(min_pair.first, u)] = 0.5*(getDistance(min_pair.first, min_pair.second) +
                 (precomputed_sums[min_pair.first] - precomputed_sums[min_pair.second])/(u - 2));
       pair_distances[std::pair<int, int>(min_pair.second, u)] = getDistance(min_pair.first, min_pair.second) - 
                 pair_distances[std::pair<int, int>(min_pair.first, u)];
+      // remove them from indices list
       current_node_indices.erase(current_node_indices.find(min_pair.first));
       current_node_indices.erase(current_node_indices.find(min_pair.second));
+      // for all other vertices with indices in current_node_indices vector, compute distances to new vertex
       for (std::set<int>::iterator iter = current_node_indices.begin(); iter != current_node_indices.end(); ++iter) {
         pair_distances[std::pair<int, int>(*iter, u)] = (getDistance(min_pair.first, *iter) + getDistance(min_pair.second, *iter) - getDistance(min_pair.first, min_pair.second))/2;
       }
