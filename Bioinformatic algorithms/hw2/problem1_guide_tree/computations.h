@@ -25,13 +25,13 @@ int levenshtein_distance(std::string const& a, std::string const& b) {
   if (a.size() < b.size())
     return levenshtein_distance(b, a);
   std::vector<int> editValues(a.size() + 1);
-  for (int i = 0; i < a.size(); i ++) {
+  for (size_t i = 0; i < a.size(); i ++) {
     editValues[i + 1] = editValues[i] + cost('-', a[i]);
   }
-  for (int j = 0; j < b.size(); j ++) {
+  for (size_t j = 0; j < b.size(); j ++) {
     int lastV = editValues[0];
     editValues[0] = editValues[0] + cost(b[j], '-');
-    for (int i = 0; i < a.size(); i ++) {
+    for (size_t i = 0; i < a.size(); i ++) {
       lastV = std::min(editValues[i] + cost('-', a[i]), std::min(editValues[i + 1] + cost(b[j], '-'), lastV + cost(a[i], b[j])));
       std::swap(lastV, editValues[i + 1]);
     }

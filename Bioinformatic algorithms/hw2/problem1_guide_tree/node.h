@@ -23,7 +23,7 @@ public:
   void acceptVisitor(IVisitor * visitor) {
     return visitor->visit(this);
   }
-   std::shared_ptr<TreeElement> const & op1() const {
+  std::shared_ptr<TreeElement> const & op1() const {
     return _op1;
   }
   std::shared_ptr<TreeElement> const & op2() const {

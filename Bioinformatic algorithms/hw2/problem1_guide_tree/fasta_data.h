@@ -3,6 +3,8 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <algorithm>
+#include <cctype>
 
 typedef std::vector<std::pair<std::string, std::string> > FastaArray;
 /* this struct should contain basic fasta reading functionality*/
@@ -23,6 +25,7 @@ struct FastaData{
 
     while (!input_file.eof()) {
       std::getline(input_file, buffer);
+      buffer.erase(std::remove_if(buffer.begin(), buffer.end(), ::iscntrl), buffer.end());
       processString(buffer);
     }
     input_file.close();

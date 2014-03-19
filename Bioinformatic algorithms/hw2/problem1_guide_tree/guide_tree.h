@@ -27,14 +27,14 @@ public:
 
   //method prepares Leaf objects for future usage
   void PrepareLeaves() {
-    for (int i = 0; i < fasta_data->data.size(); i++) {
+    for (size_t i = 0; i < fasta_data->data.size(); i++) {
       _nodes.push_back(std::shared_ptr<TreeElement>(new Leaf(i)));
       current_node_indices.insert(i);
     }
 
-    for (int i = 0; i < fasta_data->data.size(); i++) {
+    for (size_t i = 0; i < fasta_data->data.size(); i++) {
       // fasta_data->data[i].second
-      for (int j = i + 1; j < fasta_data->data.size(); j ++) {
+      for (size_t j = i + 1; j < fasta_data->data.size(); j ++) {
         int dist = levenshtein_distance(fasta_data->data[i].second, fasta_data->data[j].second);
         precomputed_sums[i] += dist;
         precomputed_sums[j] += dist;
@@ -43,6 +43,7 @@ public:
       
     }
   }
+
   double getDistance(int i, int j) {
     if (i > j)
       return getDistance(j, i);
@@ -86,7 +87,7 @@ public:
     PrepareLeaves();
     //в цикле:
     //1. строим Q, возвращаем пару вершин до которых минимальное рассто€ние
-    for (int i = 0 ; i < fasta_data->data.size() - 1; i++) {
+    for (size_t i = 0 ; i < fasta_data->data.size() - 1; i++) {
       std::pair<int, int> min_pair = getMinPairFromQMatrix();
       //3. добавл€ем новую вершину, €вл€ющуюс€ объединением старых, в список
       int u = _nodes.size();
