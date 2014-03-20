@@ -12,7 +12,7 @@ void computePalindromes(std::string const& input_string, std::vector<int>& even_
     if (rightBorder > i) {
       width = std::min(1 + static_cast<int>(rightBorder - i), odd_palindromes[leftBorder + (rightBorder - i)]);
     }
-    while (i + width < input_string.size() && i - width >= 0 && input_string[i - width] == input_string[i + width]) {
+    while (i + width < static_cast<int>(input_string.size()) && i - width >= 0 && input_string[i - width] == input_string[i + width]) {
       width ++;
     }
     width --;
@@ -26,7 +26,7 @@ void computePalindromes(std::string const& input_string, std::vector<int>& even_
     if (rightBorder2 > i) {
       width += std::min(static_cast<int>(rightBorder2 - i + 1), even_palindromes[leftBorder2 + (rightBorder2 - i + 1)]);
     }
-    while (i + width - 1 < input_string.size() && i - width >= 0 && input_string[i - width] == input_string[i + width - 1]) {
+    while (i + width - 1 < static_cast<int>(input_string.size()) && i - width >= 0 && input_string[i - width] == input_string[i + width - 1]) {
       width ++;
     }
     if (width > 0) width --; 
