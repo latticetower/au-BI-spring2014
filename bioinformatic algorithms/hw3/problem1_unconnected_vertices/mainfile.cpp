@@ -1,18 +1,21 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <stack>
 #include <set>
 #include <map>
+
 
 struct Graph{
   int n;//vertices count;
   std::map<int, std::set<int> > adj_list;
+  std::vector<std::pair<int, int> > values;//use this array to store max values for given vertex
 
   Graph() {}
 
   void loadAdjList(std::istream & input_stream) {
     input_stream >> n;
+    values.resize(n + 1, std::pair<int, int> (0, 1));
+
     while (!input_stream.eof()) {
       int a, b;
       input_stream >> a >> b;
@@ -26,29 +29,58 @@ struct Graph{
       adj_list[b].insert(a);
     }
   }
+  void recursive_max_set_size(int parent, int current) {
+    if (parent > 0 && adj_list[current].size() <= 1) { //that means that current vertex is a leaf
+      //values[current].first = 0;
+      //values[current].second = 1;
+    }
+    else {
+      //values[current].second = 1;
+      for (std::set<int>::iterator iter = adj_list[current].begin(); iter != adj_list[current].end(); ++ iter) {
+        if (*iter == parent)
+          continue;
+        recursive_max_set_size(current, *iter);
+        values[current].first  += std::max(values[*iter].first, values[*iter].second);
+        values[current].second += values[*iter].first;
+      }
+    }
+  }
 
-  std::pair<std::set<int>, std::set<int> > get2Coloring() {
-    std::pair<std::set<int>, std::set<int> > result;
+  std::set<int> recursive_max_set(int parent, int current, int current_max_value) {
+    std::set<int> result;
+    if (current_max_value == values[current].second) { //this means we include current vertex to result set
+      result.insert(current);
+      for (std::set<int>::iterator iter = adj_list[current].begin(); iter != adj_list[current].end(); ++ iter) {
+        if (*iter == parent)
+          continue;
+        std::set<int> res = recursive_max_set(current, *iter, values[*iter].first);
+        result.insert(res.begin(), res.end());
+      }
+    }
+    else {//this means we don't include current vertex
+      for (std::set<int>::iterator iter = adj_list[current].begin(); iter != adj_list[current].end(); ++ iter) {
+        if (*iter == parent)
+          continue;
+        if (values[*iter].first > values[*iter].second) {
+          std::set<int> res = recursive_max_set(current, *iter, values[*iter].first);
+          result.insert(res.begin(), res.end());
+        }
+        else {
+          std::set<int> res = recursive_max_set(current, *iter, values[*iter].second);
+          result.insert(res.begin(), res.end());
+        }
+      }
+    }
+    return result;
+  }
+  std::pair<int, std::set<int> > get2Coloring() {
+    std::pair<int, std::set<int> > result;
     if (adj_list.size() == 0)
       return result;
     int startvertex = (adj_list.begin())->first;
-    result.first.insert(startvertex);
-    std::stack<int> observed_vertices;
-    observed_vertices.push(startvertex);
-    while (!observed_vertices.empty()) {
-      int current_vertex = observed_vertices.top();
-      observed_vertices.pop();
-      for (std::set<int>::iterator iter = adj_list[current_vertex].begin(); iter != adj_list[current_vertex].end(); ++iter) {
-        if (result.first.find(*iter) == result.first.end() && result.second.find(*iter) == result.second.end()) {
-          if (result.first.find(current_vertex) != result.first.end()) {
-            result.second.insert(*iter);
-          } else if (result.second.find(current_vertex) != result.second.end()) {
-            result.first.insert(*iter);
-          }
-          observed_vertices.push(*iter);
-        } 
-      }
-    }
+    recursive_max_set_size(0, startvertex);
+    result.first = std::max(values[startvertex].first, values[startvertex].second);
+    result.second = recursive_max_set(0, startvertex, result.first);
     return result;
   }
 };
@@ -70,20 +102,15 @@ int main(int argc, char** argv){
   }
   graph.loadAdjList(inputStream);
   inputStream.close();
-  std::pair<std::set<int>, std::set<int> > coloring = graph.get2Coloring();
+  std::pair<int, std::set<int> > coloring = graph.get2Coloring();
   
   std::ofstream output_file(argv[2]);
-  if (coloring.first.size() > coloring.second.size()) {
-    output_file << coloring.first.size() << std::endl;
-    for (std::set<int>::iterator iter = coloring.first.begin(); iter != coloring.first.end(); ++iter) {
-      output_file << *iter << " ";
-    }
-  } else {
-    output_file << coloring.second.size() << std::endl;
-    for (std::set<int>::iterator iter = coloring.second.begin(); iter != coloring.second.end(); ++iter) {
-      output_file << *iter << " ";
-    }
+ 
+  output_file << coloring.first << std::endl;
+  for (std::set<int>::iterator iter = coloring.second.begin(); iter != coloring.second.end(); ++iter) {
+    output_file << *iter << " ";
   }
+
   
   output_file.close();
   return 0;
