@@ -107,9 +107,31 @@ foldTree'6 g x (Branch lb v rb) = foldTree'6 g (foldTree'6 g (g x v) lb) rb
 -- результат обработки левого поддерева и значение в узле. Но я пока не придумала, как ее лучше написать 
 --(и по какому принципу в этом случае увеличивать аккумулятор).
 
+-- свертка по уровням
+foldTree'7 :: (b -> a -> b) -> b -> Tree a -> b
+foldTree'7 _ x Nil = x
+foldTree'7 g x (Branch lb v rb) = helper g (g x v) lb [rb]
+  where 
+    helper :: (b -> a ->b) -> b -> Tree a -> [Tree a] -> b
+    helper g x Nil [] = x
+    helper g x Nil l = helper g x (head l) (tail l)
+    helper g x (Branch lb v rb) [] = helper g (g x v) (lb) [rb]
+    helper g x (Branch lb v rb) t = helper g (g x v) (head t) ((tail t) ++ [lb, rb])
+
+    
+foldTree'8 :: (b -> a -> b) -> b -> Tree a -> b
+foldTree'8 _ x Nil = x
+foldTree'8 g x (Branch lb v rb) = helper g (g x v) rb [lb]
+  where 
+    helper :: (b -> a ->b) -> b -> Tree a -> [Tree a] -> b
+    helper g x Nil [] = x
+    helper g x Nil l = helper g x (head l) (tail l)
+    helper g x (Branch lb v rb) [] = helper g (g x v) (rb) [lb]
+    helper g x (Branch lb v rb) t = helper g (g x v) (head t) ((tail t) ++ [rb, lb])
+
 flattenTree :: Tree a -> [a]
 flattenTree = foldTree' (\acc v -> acc ++ [v]) []
 
 flattenTree' :: Ord a => Tree a -> [a]
-flattenTree' t = (foldTree'5 (flip insert ) [] t)
+flattenTree' t = (foldTree'7 (flip insert ) [] t)
 -- ну и то же самое можно написать с разными вариантами foldTree...
