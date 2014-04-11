@@ -46,14 +46,14 @@ struct Graph{
     }
   }
 
-  std::set<int> recursive_max_set(int parent, int current, int current_max_value) {
+  std::set<int> recursive_max_set(int parent, int current, int current_max_value, bool parent_included) {
     std::set<int> result;
-    if (current_max_value == values[current].second) { //this means we include current vertex to result set
+    if (current_max_value == values[current].second && !parent_included) { //this means we include current vertex to result set
       result.insert(current);
       for (std::set<int>::iterator iter = adj_list[current].begin(); iter != adj_list[current].end(); ++ iter) {
         if (*iter == parent)
           continue;
-        std::set<int> res = recursive_max_set(current, *iter, values[*iter].first);
+        std::set<int> res = recursive_max_set(current, *iter, values[*iter].first, true);
         result.insert(res.begin(), res.end());
       }
     }
@@ -62,11 +62,11 @@ struct Graph{
         if (*iter == parent)
           continue;
         if (values[*iter].first > values[*iter].second) {
-          std::set<int> res = recursive_max_set(current, *iter, values[*iter].first);
+          std::set<int> res = recursive_max_set(current, *iter, values[*iter].first, false);
           result.insert(res.begin(), res.end());
         }
         else {
-          std::set<int> res = recursive_max_set(current, *iter, values[*iter].second);
+          std::set<int> res = recursive_max_set(current, *iter, values[*iter].second, false);
           result.insert(res.begin(), res.end());
         }
       }
@@ -80,7 +80,7 @@ struct Graph{
     int startvertex = (adj_list.begin())->first;
     recursive_max_set_size(0, startvertex);
     result.first = std::max(values[startvertex].first, values[startvertex].second);
-    result.second = recursive_max_set(0, startvertex, result.first);
+    result.second = recursive_max_set(0, startvertex, result.first, false);
     return result;
   }
 };
