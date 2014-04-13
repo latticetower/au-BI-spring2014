@@ -19,6 +19,7 @@ int main(int argc, char** argv) {
   inputStream.close();
 
   SuffixTree tree(fasta.data[0].second);
+  tree.Simplify();
   std::ofstream output_file(argv[2]);
   
   output_file.close();

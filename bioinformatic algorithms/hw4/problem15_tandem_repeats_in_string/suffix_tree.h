@@ -4,19 +4,23 @@
 
 //ititially we assume that all vertices describe the same string substrings
 template <class Graph>
-struct tree_vertex{
+class tree_vertex {
+private:
+  int get_id() {
+    return (int)this;
+  }
   std::shared_ptr<tree_vertex> next_vertex; // really im not sure now what to store
   std::shared_ptr<tree_vertex> neighbour; //next neighbour for current vertex
   size_t length;
   Graph * owner;
 
   std::set<size_t> start_positions;
- 
-  //size_t start_pos;  
-  
+public:
+
   void set_parent(Graph * g) {
     owner = g;
   }
+  
   ~tree_vertex() {
     next_vertex.reset();
     neighbour.reset();
@@ -24,7 +28,6 @@ struct tree_vertex{
   tree_vertex(Graph * g, size_t start, size_t _length = 1): next_vertex(NULL), neighbour(NULL), length(_length), owner(g) { 
     start_positions.clear();
     start_positions.insert(start);
-    //start_pos = start;
   }
 
   tree_vertex(tree_vertex & orig) {
@@ -45,7 +48,7 @@ struct tree_vertex{
 
   tree_vertex<Graph>* add_next(size_t start, size_t length = 1) {
     if (next_vertex == NULL) {
-      next_vertex = std::shared_ptr<tree_vertex<Graph> >(new tree_vertex<Graph>(owner, start));
+      next_vertex = std::shared_ptr<tree_vertex<Graph> >(new tree_vertex<Graph>(owner, start, length));
       return next_vertex.get();
     }
     return next_vertex->add_neighbour(start, length);
@@ -63,8 +66,22 @@ struct tree_vertex{
     } 
     return neighbour->add_neighbour(start, length);
   }
+  bool operator == (tree_vertex<Graph> const& obj) {
+    return (owner == obj.owner) && 
+      (start_positions.size() == obj.start_positions.size())  ;
+  }
 
   void simplify() {
+    if (next_vertex == NULL)
+      return;
+    next_vertex.get()->simplify();
+    if (*this == *next_vertex.get() && next_vertex->neighbour == NULL) {
+      this->length += next_vertex.get()->length;
+      next_vertex = next_vertex.get()->next_vertex;
+    }
+    if (neighbour != NULL)
+      neighbour.get()->simplify();
+
   }
 };
 
