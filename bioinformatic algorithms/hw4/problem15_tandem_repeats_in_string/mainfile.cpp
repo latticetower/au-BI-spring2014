@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
   //tree.Simplify();
   std::pair<size_t, size_t> result = tree.Traverse();
   std::ofstream output_file(argv[2]);
-  output_file << ">result" << std::endl << fasta.data[0].second.substr(result.first, result.second);
+  output_file << ">repeat" << std::endl << fasta.data[0].second.substr(result.first, result.second);
   output_file.close();
   //std::ofstream of("data.txt");
   //NewickWriter writer;

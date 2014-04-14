@@ -3,6 +3,7 @@
 #include <set>
 #include <algorithm>
 #include<vector>
+#include <sstream>
 #include "ivisitor.h"
 
 bool compare_pairs(std::pair<size_t, size_t> a, std::pair<size_t, size_t> b) {
@@ -23,7 +24,7 @@ private:
 
   std::set<size_t> start_positions;
 public:
-  static const int MIN_REPEATS_COUNT = 2;
+  static const unsigned int MIN_REPEATS_COUNT = 2;
   
   void set_parent(Graph * g) {
     owner = g;
@@ -118,7 +119,6 @@ public:
         candidates.push_back(this->neighbour->traverse(prefixes, prefix_pos, acc));
       }
     }
-    bool should_check_child = false;
     //1. проходим по всем таким участкам: если следующий за ними элемент находится в списке префиксов, то это наш кандидат
     //for (std::set<size_t>::iterator iter = this->start_positions.begin(); iter != start_positions.end(); ++iter) {
       if (this->start_positions.find(prefix_pos - length) != this->start_positions.end() && 
