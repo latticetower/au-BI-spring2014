@@ -20,8 +20,9 @@ int main(int argc, char** argv) {
 
   SuffixTree tree(fasta.data[0].second);
   tree.Simplify();
+  std::pair<size_t, size_t> result = tree.Traverse();
   std::ofstream output_file(argv[2]);
-  
+  output_file << ">result" << std::endl << fasta.data[0].second.substr(result.first, result.second);
   output_file.close();
   return 0;
 }

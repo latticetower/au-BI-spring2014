@@ -1,6 +1,12 @@
 #pragma once
 #include <memory>
 #include <set>
+#include <algorithm>
+#include<vector>
+
+bool compare_pairs(std::pair<size_t, size_t> a, std::pair<size_t, size_t> b) {
+    return a.second > b.second;
+ }
 
 //ititially we assume that all vertices describe the same string substrings
 template <class Graph>
@@ -16,7 +22,8 @@ private:
 
   std::set<size_t> start_positions;
 public:
-
+  static const int MIN_REPEATS_COUNT = 2;
+  
   void set_parent(Graph * g) {
     owner = g;
   }
@@ -81,7 +88,68 @@ public:
     }
     if (neighbour != NULL)
       neighbour.get()->simplify();
+  }
+  
 
+
+  std::pair<size_t, size_t> traverse(std::set<size_t>& prefixes, size_t const & prefix_pos, size_t acc) {
+    if (this->start_positions.size() < MIN_REPEATS_COUNT) {
+      if (this->start_positions.find(prefix_pos - 1) != this->start_positions.end() && 
+        this->start_positions.find(prefix_pos - 1 + acc) != this->start_positions.end() &&
+          prefixes.find(prefix_pos - acc) != prefixes.end()) {// == *iter + length) {
+            return std::make_pair(prefix_pos, acc );
+      }
+      else
+        return std::make_pair(0, 0);
+    }
+    std::vector<std::pair<size_t, size_t> > candidates;
+    if (neighbour != NULL) {
+      if (this->start_positions.find(prefix_pos) != this->start_positions.end()) {
+
+      } else {
+        if (this->neighbour->start_positions.size() < MIN_REPEATS_COUNT) {
+          return std::make_pair(prefix_pos, acc);
+        }
+        candidates.push_back(this->neighbour->traverse(prefixes, prefix_pos, acc));
+      }
+    }
+    bool should_check_child = false;
+    //1. проходим по всем таким участкам: если следующий за ними элемент находится в списке префиксов, то это наш кандидат
+    //for (std::set<size_t>::iterator iter = this->start_positions.begin(); iter != start_positions.end(); ++iter) {
+      if (this->start_positions.find(prefix_pos - 1) != this->start_positions.end() && 
+        this->start_positions.find(prefix_pos - 1 + acc) != this->start_positions.end() &&
+          prefixes.find(prefix_pos - acc) != prefixes.end()) {// == *iter + length) {
+        candidates.push_back(std::make_pair(prefix_pos, acc + length));
+      }
+      candidates.push_back(this->next_vertex->traverse(prefixes, prefix_pos, acc + length));
+    
+    //}
+    std::sort(candidates.begin(), candidates.end(), compare_pairs);
+    if (candidates.size() == 0)
+      return std::make_pair(0, 0);
+    return candidates.at(0);
+  }
+  
+  std::pair<size_t, size_t> traverse() {
+    std::pair<size_t,size_t> r1 = std::make_pair(0, 0);
+    std::pair<size_t, size_t> r2 ;
+    if (next_vertex != NULL) {
+      for (std::set<size_t>::iterator iter = next_vertex->start_positions.begin(); iter != next_vertex->start_positions.end(); ++ iter) {
+        r2 = next_vertex->traverse(next_vertex->start_positions, *iter, 0);
+        if (r2.second > r1.second)
+          r1 = r2;
+      }
+    }
+    tree_vertex<Graph> * current_neighbour = next_vertex->neighbour.get();
+    while (current_neighbour != NULL) {
+      for (std::set<size_t>::iterator iter = current_neighbour->start_positions.begin(); iter != current_neighbour->start_positions.end(); ++ iter) {
+        r2 = current_neighbour->traverse(current_neighbour->start_positions, *iter, 0);
+        if (r2.second > r1.second)
+          r1 = r2;
+      }
+      current_neighbour = current_neighbour->neighbour.get();
+    }
+    return r1;
   }
 };
 
@@ -114,7 +182,12 @@ public:
   void Simplify() {
     root->simplify();
   }
-
+  std::pair<size_t, size_t> Traverse() {
+    if (root == NULL)
+      return std::make_pair(0, 0);
+    return root->traverse();
+    
+  }
 protected:
   void AddString(size_t start_index) {
     tree_vertex<SuffixTree>* current_vertex = root.get();
