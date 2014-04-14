@@ -109,7 +109,11 @@ public:
 
       } else {
         if (this->neighbour->start_positions.size() < MIN_REPEATS_COUNT) {
-          candidates.push_back(std::make_pair(prefix_pos, acc));
+          if (this->start_positions.find(prefix_pos - 1) != this->start_positions.end() && 
+        this->start_positions.find(prefix_pos - 1 + acc) != this->start_positions.end() &&
+          prefixes.find(prefix_pos - acc) != prefixes.end()) {// == *iter + length) {
+            candidates.push_back(std::make_pair(prefix_pos, acc));
+          }
         }
         candidates.push_back(this->neighbour->traverse(prefixes, prefix_pos, acc));
       }
