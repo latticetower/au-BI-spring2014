@@ -3,6 +3,7 @@
 #include <set>
 #include <algorithm>
 #include<vector>
+#include "ivisitor.h"
 
 bool compare_pairs(std::pair<size_t, size_t> a, std::pair<size_t, size_t> b) {
     return a.second > b.second;
@@ -108,7 +109,7 @@ public:
 
       } else {
         if (this->neighbour->start_positions.size() < MIN_REPEATS_COUNT) {
-          return std::make_pair(prefix_pos, acc);
+          candidates.push_back(std::make_pair(prefix_pos, acc));
         }
         candidates.push_back(this->neighbour->traverse(prefixes, prefix_pos, acc));
       }
@@ -116,9 +117,9 @@ public:
     bool should_check_child = false;
     //1. проходим по всем таким участкам: если следующий за ними элемент находится в списке префиксов, то это наш кандидат
     //for (std::set<size_t>::iterator iter = this->start_positions.begin(); iter != start_positions.end(); ++iter) {
-      if (this->start_positions.find(prefix_pos - 1) != this->start_positions.end() && 
-        this->start_positions.find(prefix_pos - 1 + acc) != this->start_positions.end() &&
-          prefixes.find(prefix_pos - acc) != prefixes.end()) {// == *iter + length) {
+      if (this->start_positions.find(prefix_pos - length) != this->start_positions.end() && 
+        this->start_positions.find(prefix_pos + acc) != this->start_positions.end() &&
+          prefixes.find(prefix_pos - acc -length) != prefixes.end()) {// == *iter + length) {
         candidates.push_back(std::make_pair(prefix_pos, acc + length));
       }
       candidates.push_back(this->next_vertex->traverse(prefixes, prefix_pos, acc + length));
@@ -151,6 +152,31 @@ public:
     }
     return r1;
   }
+  void acceptVisitor(IVisitor * visitor) {
+    return visitor->visit(this);
+  }
+  tree_vertex<Graph> * getNext() {
+    return next_vertex.get();
+  }
+  tree_vertex<Graph> * getNeighbour() {
+    return neighbour.get();
+  }
+
+  std::string to_s() {
+    std::stringstream ss;
+    std::set<size_t>::iterator iter = this->start_positions.begin();
+    ss << "leaf[ (" << *iter; 
+    ++iter;
+    for (; iter != start_positions.end(); ++iter) {
+      ss << "," << *iter;
+    }
+    ss <<") - " << this->length << "] ";
+    //if (this->next_vertex != NULL)
+    //  ss << next_vertex->to_s() << ";" << std::endl;
+    //else ss<< "[]" <<std::endl;
+
+    return ss.str();
+  }
 };
 
 
@@ -169,7 +195,9 @@ private:
   std::string _str;
   std::shared_ptr<tree_vertex<SuffixTree> > root;
 public:
-
+  tree_vertex<SuffixTree>* getRoot() {
+    return root.get();
+  }
   
   SuffixTree(std::string & base_str) {
     _str = std::string(base_str.c_str());
@@ -196,6 +224,10 @@ protected:
     }
 
   }
-
+public:
+  void acceptVisitor(IVisitor * visitor) {
+    return visitor->visit(this);
+  }
   
+ 
 };
