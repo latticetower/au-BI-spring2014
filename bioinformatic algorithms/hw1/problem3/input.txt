@@ -1,0 +1,8 @@
+>seq1
+a
+>seq2
+a
+>seq3
+ca
+>seq4
+ac
