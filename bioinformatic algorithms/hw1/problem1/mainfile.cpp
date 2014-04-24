@@ -24,43 +24,37 @@ int levenshtein_dist(std::string & str_a, std::string & str_b, int k) {
   }
   for (int i = 0; i < std::min(k, (int)str_a.size()); i++) {
     int j = k - i;
+    min_value = holder[k - i - 1];
     for ( ; j < std::min(2*k - 1, (int)str_b.size() + k - i - 1); j ++) {
       holder[j] = std::min(std::min(holder[j - 1], holder[j + 1]) + GAP_COST, holder[j] + match(str_a[i], str_b[j - k + i]));
-    }
-    holder[j] = std::min(holder[j - 1] + GAP_COST, holder[j] + match(str_a[i], str_b[j - k + i]));
-    min_value = holder[k - i - 1];
-    for (int j = k - i; j < std::min(2*k - 1, (int)str_b.size() + k - i - 1); j ++ ) {
-      if (holder[j]<min_value)
-        min_value = holder[j];
-    }
-    if (min_value >= k)
-      return -1;
-  }
-  //середина
-  for (int i = k; i < (int)str_a.size(); i ++) {
-    holder[0] = std::min(holder[0] + match(str_a[i], str_b[i - k]), holder[1] + GAP_COST);
-    int j = 0;
-    for (; j < std::min(2*k - 1, (int)(str_b.size() - i - 1 + k)); j++) {
-      holder[j + 1] = std::min( std::min(holder[j], holder[j + 2]) + GAP_COST, holder[j + 1] + match(str_a[i], str_b[i - k + j + 1]));    
-    }
-    holder[j + 1] = std::min(holder[j + 1] + match(str_a[i], str_b[i - k + j]), holder[j] + GAP_COST);
-
-    min_value = holder[0];
-    for (int j = 1; j < std::min(2*k - 1, (int)(str_b.size() - i - 1 + k)); j++) {
       if (holder[j] < min_value)
         min_value = holder[j];
     }
+    holder[j] = std::min(holder[j - 1] + GAP_COST, holder[j] + match(str_a[i], str_b[j - k + i]));
+    if (holder[j] < min_value)
+        min_value = holder[j];
+
+    if (min_value >= k)
+      return -1;
+  }
+  //middle part
+  for (int i = k; i < (int)str_a.size(); i ++) {
+    holder[0] = std::min(holder[0] + match(str_a[i], str_b[i - k]), holder[1] + GAP_COST);
+    min_value = holder[0];
+    int j = 0;
+    for (; j < std::min(2*k - 1, (int)(str_b.size() - i - 1 + k)); j++) {
+      holder[j + 1] = std::min( std::min(holder[j], holder[j + 2]) + GAP_COST, holder[j + 1] + match(str_a[i], str_b[i - k + j + 1]));  
+      if (holder[j + 1] < min_value)
+        min_value = holder[j + 1];
+    }
+    holder[j + 1] = std::min(holder[j + 1] + match(str_a[i], str_b[i - k + j]), holder[j] + GAP_COST);
+    if (holder[j + 1] < min_value)
+        min_value = holder[j + 1];
+    
     if (min_value >= k)
       return -1;
   }
   
-  min_value = holder[k];
-  for (int i = 1; i< std::min(k + 1, (int)str_b.size() - 1); i++) {
-    if (min_value > holder[k - i])
-      min_value = holder[k - i];
-    if (min_value > holder[k + i])
-      min_value = holder[k + i];
-  }
   if (min_value >= k)
       return -1;
   return min_value;
