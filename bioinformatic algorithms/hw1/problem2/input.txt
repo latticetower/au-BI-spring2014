@@ -1,4 +1,4 @@
 >seq1
-acgtacgt
+acgtacg
 >seq2
-aagtacg
+aagtacgt
