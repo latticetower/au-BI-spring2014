@@ -215,7 +215,7 @@ int main(int argc, char** argv) {
   
   std::pair<int, std::vector<ArrowDirection> > result = levenshtein_dist(fasta.data[0].second, fasta.data[1].second, 10);
   if (result.first >= 0)
-    output_file << result.first << std::endl 
+    output_file //<< result.first << std::endl 
     << get_result_string2(fasta.data[0].second, fasta.data[1].second, result.second, 1) << std::endl 
     << get_result_string2(fasta.data[0].second, fasta.data[1].second, result.second, 2);
   else output_file<< "not similar";
