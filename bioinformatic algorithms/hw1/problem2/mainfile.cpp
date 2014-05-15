@@ -4,6 +4,7 @@
 #include <set>
 #include <map>
 #include <memory>
+#include <locale>
 #include "fasta_data.h"
 
 const int GAP_COST = 1;
@@ -18,7 +19,7 @@ enum ArrowDirection{
 // arrow directions for backtracing
 
 inline int match(char a, char b) {
-  return (a == b ? 0 : MISMATCH_COST);
+  return (std::tolower(a) == std::tolower(b) ? 0 : MISMATCH_COST);
 }
 
 //updates specified array value based on neighbour values and match/mismatch costs
@@ -102,6 +103,9 @@ std::pair<int, std::vector<ArrowDirection> > levenshtein_dist(std::string & str_
   for (int i = 0; i < k; i++) {
     holder[k - i - 1] = holder[k - i] + GAP_COST;
     holder[k + i + 1] = holder[k + i] + GAP_COST;
+    
+    directions[k + i + 1] = std::shared_ptr<DirectionHolder>(new DirectionHolder(Down, directions[k + i]));
+    directions[k - i - 1] = std::shared_ptr<DirectionHolder>(new DirectionHolder(Left, directions[k - i]));
   }
 
   std::vector<ArrowDirection> backtracing_path;
@@ -136,6 +140,7 @@ std::pair<int, std::vector<ArrowDirection> > levenshtein_dist(std::string & str_
         min_value = holder[j + 1];
         min_position = j + 1;
       }
+      
     }
     
     if (min_value >= k)
@@ -213,7 +218,7 @@ int main(int argc, char** argv) {
   
   std::ofstream output_file(argv[2]);
   
-  std::pair<int, std::vector<ArrowDirection> > result = levenshtein_dist(fasta.data[0].second, fasta.data[1].second, 10);
+  std::pair<int, std::vector<ArrowDirection> > result = levenshtein_dist(fasta.data[0].second, fasta.data[1].second, 100);
   if (result.first >= 0)
     output_file //<< result.first << std::endl 
     << get_result_string2(fasta.data[0].second, fasta.data[1].second, result.second, 1) << std::endl 
