@@ -1,0 +1,74 @@
+﻿= MSA, Лабораторная работа 6
+
+:Autor: Малыгина Т.С.
+:Date:      2014-05-02
+:Revision:  0.1
+
+a. What colour is the background distribution? And the coexpressed cluster distribution?
+
+ Фоновое распределение - обозначено синим цветом, coexpressed cluster distribution - красным.
+
+b. Do any of the k-mers appear similar? I.e., could they partially overlap?
+
+ Два наиболее значимых k-мера могут быть получены один из другого путем циклического сдвига, 
+ то же можно сказать про тройку k-меров с z-score 2.3 и значимостью 0.05
+
+c. Does these motifs seem to match any previously characterized motifs? If so, which one(s)?
+ (можно пропустить)
+
+d. Comment on the number of cis-element matches in each promoter.
+ (не нужно называть точное количество, достаточно ответа много\мало)
+
+ много, у всех разное количество
+
+e. What can you infer about the identified significantly enriched motifs?
+
+ Эти последовательности характерны для Arabidopsis thaliana, где-то еще почти не встречаются. 
+ Выглядят похожими (содержат довольно много идущих подряд T, кроме того, последовательности похожи в смысле относительно небольшого редакционного расстояния).
+
+f. Do you think that these two motifs are part of a larger motif?
+
+ Да. В списке есть несколько последовательностей, в которых эти мотивы идут друг за другом (последовательно)
+
+g. What are the JASPAR identifiers for the two AG PSSMs, and the AGL15 PSSM?
+
+ AG PSSM ID - MA0005.1, MA0005.2
+
+ AGL15 PSSM ID - MA0548.1
+
+h. How was the specificity for the second AG PSSM determined (ID ending in .2)?
+ (просто посмотреть на более детальную информацию. ответ писать не надо)
+
+i. Would it appear that the promoters of our AP3-coexpressed genes are enriched in AG or AGL15 binding sites?
+ что можно сказать о чувствительности двух методов, которые были использованы? Что такое z-score и как его изменение влияет на результат?
+ 
+ В результате запуска Cistome появилось сообщение "No significant PSSMs were found. Please decrease the significance settings.". 
+ Таким образом, первый из использованных методов более чувствительный: при том же наборе параметров он вернул какие-то результаты.
+ z-score - величина, показывающая удаленность элемента выборки от среднего в стандартных отклонениях:
+ z=(x-m)/sigma, где m - среднее, sigma - стандартное отклонение, x - элемент выборки.
+ 
+j. Are there any "good" motifs discovered by MEME in the promoters of the AP3-coexpressed genes? 
+ You'd be looking for a high number of occurences, a low p-value and a relatively long motif.
+ 
+ http://meme.ebi.edu.au/meme-4.9.1/cgi-bin/querystatus.cgi?jobid=appMEME_4.9.11400100775285-1344735912&service=MEME
+ Нашлись 3 хороших мотива, самый лучший из найденных (мотив 1) встречается 49 раз, имеет самое низкое значение e-value и имеет длину 26 нуклеотидов. 
+ И описывается выражением T[TAG][TC]TT[TC]T[TG][TC]TT[TC]T[TG][TC]T[TG]T[AG][GTA][CAT][TA]T[AGT][TA][TAC]
+ 
+ Мотивы 2 и 3 имеют значения p-value существенно ниже и более длинные; мотив 2 имеет лучшие значения p-value и длину 50, но при этом встречается всего 6 раз
+ C[CT]G[CT][AG]ACC[AGT][CA][CG][CG]GTTT[CT]CG[CA][AG][TA][AC]TTCC[AC]G[CT][AT][AG]CCG[CT]AA[TC]CGC[AT]C[CT]C[GT]CT[AG]
+ 
+ У мотива 3 у него относительно маленькие значения p-value, длина 39 и встречается он 10 раз.
+ 
+k. What is the identity of the first Arabidopsis matrix match?
+ 
+ Первый относящийся к A.i. результат - второй по score, называется SOC1, ID = MA0554.1
+ 
+l. Is there anything peculiar about the first motif?
+ 
+ http://meme.ebi.edu.au/opal-jobs/appMEME_4.9.11400112556244229997039/meme.html
+ у мотива 1 e-value минимум в 7-8 раз меньше, чем любого из оставшихся мотивов, при этом он встречается довольно часто (34 раза).
+ он почти точно описывается последовательностью CCCCTGTCCCC (или GGGGACAGGGG)
+ 
+m. Does the 1st motif resemble a motif present in JASPAR? (The NCBI code for human is 9606)
+
+ при поиске по PSPM мотива 1 самый лучший счет был у мотива с названием NR2C2 и идентификатором MA0504.1

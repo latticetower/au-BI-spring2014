@@ -6,6 +6,7 @@ import Control.Monad.Writer
 import System.Random
 import Data.List(sort, group, intercalate)
 import System.IO
+import Text.Printf
 
 --(1 балл) Напишите функцию, вычисляющую факториал с использованием монады State
 nextMultiplier :: State (Integer, Integer) Integer
@@ -95,7 +96,28 @@ average_for1000flips = do
 -- эта функция выводит среднее по сериям
 divergences_for1000flips = do
   h <- coin_flip_series id 1000
-  let h_sorted = map (\x->(head x, (length x))) (group (sort h))
+  let grouped_h = group $ sort h
+  let min = head $ head grouped_h
+  let max = head $ last grouped_h
+  i <- newIORef min
+  d <- newIORef []
+  g <- newIORef grouped_h
+  for i (<= max) (+1) ( do
+      ii <- readIORef i
+      g1 <- readIORef g
+      let el = head g1
+      if ii < (head el) then do
+        modifyIORef d (++ [(ii, 0)])
+      else do
+        --j <- newIORef c
+        --while j (>= (head el)) (do
+        g1 <- readIORef g
+        --let el = head g1
+        modifyIORef d (++ [((head el), (length el))])
+        modifyIORef g tail
+        --  )
+    )
+  h_sorted <- readIORef d--map (\x->(head x, (length x))) (group (sort h))
   return  h_sorted --метод возвращает массив пар - первый элемент - отклонение, второй - сколько раз встретилось
 
 --(2 балла) запишите в файл в виде гистограммы (ascii-арт)
@@ -103,6 +125,6 @@ divergences_for1000flips = do
 print_ascii_to_file filename = do
   handle <- openFile filename WriteMode
   l <- divergences_for1000flips
-  hPutStr handle (intercalate "\n" (map (\x->"" ++ (show (fst x)) ++" " ++ (replicate (snd x) 'x') ) l))
+  hPutStr handle (intercalate "\n" (map (\x->printf "%10d %s" (fst x) (replicate (snd x) 'x' )) l))
   hClose handle
   print "done"
