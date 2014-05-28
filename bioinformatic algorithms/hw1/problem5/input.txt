@@ -1,0 +1,4 @@
+>seq1
+acgtacgt
+>seq2
+acgt
