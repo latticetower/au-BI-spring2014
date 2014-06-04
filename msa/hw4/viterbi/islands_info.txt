@@ -1,0 +1,11 @@
+CP003331.fna
+gi|378796054|gb|CP003331.1| Vibrio cholerae IEC224 chromosome II, complete sequence
+--------------------
+Land of 6 CpG Islands
+ Island 1: from 275667 to 276363 - "hypothetical protein" (protein_id - "BCCTI:O3Y_14658", "AFC59752.1")
+ Island 2: from 666685 to 667661 - "COG1257 Hydroxymethylglutaryl-CoA reductase" (protein_id - "BCCTI:O3Y_16913", "AFC60199.1")
+ Island 3: from 669451 to 670312 - "molybdate ABC transporter permease protein" (protein_id - "BCCTI:O3Y_16923", "AFC60201.1"), 
+                                   "molybdenum ABC transporter, periplasmic molybdenum-binding protein" (protein_id - "BCCTI:O3Y_16928", "AFC60202.1")
+ Island 4: from 746324 to 746562 - "cold-shock DEAD-box protein A" (protein_id - "BCCTI:O3Y_17288", "AFC60274.1")
+ Island 5: from 952634 to 953263 - "Oye family NADH-dependent flavin oxidoreductase" (protein_id - "BCCTI:O3Y_18168", "AFC60448.1")
+ Island 6: from 1023944 to 1024418

@@ -1,0 +1,61 @@
+CP003331.fna
+gi|378796054|gb|CP003331.1| Vibrio cholerae IEC224 chromosome II, complete sequence
+--------------------
+Iteration 1: 
+ state1 found 1061417 times, state2 found 10719 times,
+ number of segments with A+T state - 48, number of segments with G+C state - 47
+ New transitions probabilities: a11=1.0000, a12=0.0000, a21=0.0044, a22=0.9956
+--------------------
+Iteration 2: 
+ state1 found 1067281 times, state2 found 4855 times,
+ number of segments with A+T state - 12, number of segments with G+C state - 11
+ New transitions probabilities: a11=1.0000, a12=0.0000, a21=0.0023, a22=0.9977
+--------------------
+Iteration 3: 
+ state1 found 1068265 times, state2 found 3871 times,
+ number of segments with A+T state - 8, number of segments with G+C state - 7
+ New transitions probabilities: a11=1.0000, a12=0.0000, a21=0.0018, a22=0.9982
+--------------------
+Iteration 4: 
+ state1 found 1068256 times, state2 found 3880 times,
+ number of segments with A+T state - 7, number of segments with G+C state - 6
+ New transitions probabilities: a11=1.0000, a12=0.0000, a21=0.0015, a22=0.9985
+--------------------
+Iteration 5: 
+ state1 found 1068256 times, state2 found 3880 times,
+ number of segments with A+T state - 7, number of segments with G+C state - 6
+ New transitions probabilities: a11=1.0000, a12=0.0000, a21=0.0015, a22=0.9985
+--------------------
+Iteration 6: 
+ state1 found 1068256 times, state2 found 3880 times,
+ number of segments with A+T state - 7, number of segments with G+C state - 6
+ New transitions probabilities: a11=1.0000, a12=0.0000, a21=0.0015, a22=0.9985
+--------------------
+Iteration 7: 
+ state1 found 1068256 times, state2 found 3880 times,
+ number of segments with A+T state - 7, number of segments with G+C state - 6
+ New transitions probabilities: a11=1.0000, a12=0.0000, a21=0.0015, a22=0.9985
+--------------------
+Iteration 8: 
+ state1 found 1068256 times, state2 found 3880 times,
+ number of segments with A+T state - 7, number of segments with G+C state - 6
+ New transitions probabilities: a11=1.0000, a12=0.0000, a21=0.0015, a22=0.9985
+--------------------
+Iteration 9: 
+ state1 found 1068256 times, state2 found 3880 times,
+ number of segments with A+T state - 7, number of segments with G+C state - 6
+ New transitions probabilities: a11=1.0000, a12=0.0000, a21=0.0015, a22=0.9985
+--------------------
+Iteration 10: 
+ state1 found 1068256 times, state2 found 3880 times,
+ number of segments with A+T state - 7, number of segments with G+C state - 6
+ New transitions probabilities: a11=1.0000, a12=0.0000, a21=0.0015, a22=0.9985
+-------------------
+------------
+Land of 6 CpG Islands
+ Island 1: from 275667 to 276363
+ Island 2: from 666685 to 667661
+ Island 3: from 669451 to 670312
+ Island 4: from 746324 to 746562
+ Island 5: from 952634 to 953263
+ Island 6: from 1023944 to 1024418
