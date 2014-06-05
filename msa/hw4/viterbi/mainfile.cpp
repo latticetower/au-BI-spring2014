@@ -200,7 +200,6 @@ char cur_segment = states_string[0];
 void print_islands(std::ostream & os, std::string const & sequence, std::string const & statestr, const char * fasta_name) {
   std::ofstream output_file2(fasta_name);
   bool in_island = false;
-  long long pos;
   int counter = 0;
   for (size_t i = 0; i < sequence.size(); i++) {
     if (statestr[i] == '2') {
@@ -226,9 +225,9 @@ void print_islands(std::ostream & os, std::string const & sequence, std::string 
     in_island = false;
     os << sequence.size() - 1 << "\n";
   }
-  
+
   output_file2.close();
-  
+
 }
 
 int main(int argc, char** argv) {
@@ -255,8 +254,8 @@ int main(int argc, char** argv) {
     output_file1 << "--------------------\nIteration " << i+1 << ": \n";
     get_state_sequence(str1, s);
     update_transitions(s);
-    output_file1 << " state1 found " << _state1 << " times, state2 found " << _state2 << " times,\n" 
-        << " number of segments with A+T state - " << _segment1 << ", number of segments with G+C state - " << _segment2 << std::endl; 
+    output_file1 << " state1 found " << _state1 << " times, state2 found " << _state2 << " times,\n"
+        << " number of segments with A+T state - " << _segment1 << ", number of segments with G+C state - " << _segment2 << std::endl;
     std::cout << "\n " << _state1 << " " << _state2 << " "<<_segment1 << " jj " << _segment2;
     output_file1  << " New transitions probabilities: a11=" << a11 << ", a12=" << a12 << ", a21=" << a21 << ", a22=" << a22 << std::endl;
     a11 = log(a11);
@@ -265,7 +264,7 @@ int main(int argc, char** argv) {
     a22 = log(a22);
   }
   output_file1 << "-------------------\n------------\nLand of " << _segment2 << " CpG Islands\n";
-  print_islands(output_file1, str1, s, "viterbi_islands.fasta"); 
+  print_islands(output_file1, str1, s, "viterbi_islands.fasta");
   //std::cout << s;
   output_file1.close();
   return 0;

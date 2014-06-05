@@ -1,0 +1,7 @@
+CP003331.fna
+gi|378796054|gb|CP003331.1| Vibrio cholerae IEC224 chromosome II, complete sequence
+Baum-Welch training: 29 iterations passed
+ final log-likelihood is -2.13871e+06
+ New initial probabilities are: pi1=1.00000e+00, pi2=1.39950e-46
+ New transitional probabilities: a11=9.98746e-01, a12=1.25370e-03, a21=4.66096e-04, a22=9.99534e-01
+ New emissions are: e1_at=2.96385e-01, e1_cg=2.03615e-01, e2_at=2.53886e-01, e2_cg=2.46114e-01
