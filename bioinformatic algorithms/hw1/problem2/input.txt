@@ -1,4 +1,4 @@
->seq1
-aaaAAaa
->seq2
-aaaaa
+>1
+C
+>2
+A

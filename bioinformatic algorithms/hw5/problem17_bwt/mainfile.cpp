@@ -32,10 +32,11 @@ int main(int argc, char** argv) {
   SuffixTree tree(text_fasta.data[0].second);
   BWTBuilder bwt_builder;
   tree.acceptVisitor(&bwt_builder);
-
+  NewickWriter newick;
+  tree.acceptVisitor(&newick);
   std::vector<long> result = bwt_builder.getBWT();
-  std::ofstream output_file(argv[2]);
-  output_file << ">tree processed as" << std::endl;
+  std::ofstream output_file(argv[3]);
+  output_file << ">tree processed as" << std::endl << newick.getResult() << std::endl;
     
   for (std::vector<long>::iterator iter = result.begin(); iter!= result.end(); ++iter) {
     output_file << *iter << "\t";

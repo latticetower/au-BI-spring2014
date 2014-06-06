@@ -127,7 +127,7 @@ std::pair<int, std::vector<ArrowDirection> > levenshtein_dist(std::string & str_
       min_position = 0;
     }
   
-    for ( ; j < std::min(2*k - 1, (int)str_b.size() + k - i - 1); j ++) {
+    for ( ; j <= std::min(2*k - 1, (int)str_b.size() + k - i - 1); j ++) {
       ArrowDirection direction = set_value(holder, i, j, k, str_a, str_b);
       if (direction == Match)
         directions[j + 1] = std::shared_ptr<DirectionHolder>(new DirectionHolder(direction, directions[j + 1]));
