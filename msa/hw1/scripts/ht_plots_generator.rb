@@ -10,14 +10,23 @@ require '../helpers/plotter_utility.rb'
 
 @@data_hash = Hash.new
 
+if ARGV.size < 1
+  puts "print filenames with data"
+  exit
+end
 # process all data generated previously
 ARGV.each do |filename|
   File.open(filename) do |datafile|
+    data_array = {}
     while not datafile.eof? do
       inputline = eval(datafile.gets)
       if inputline.has_key?(:type) and inputline[:type] == "plot" #if data string describes plot, get plot name, and plot data and output somewhere...
-        PlotterUtility::generate_plot('../output/img/' + inputline[:filename], inputline[:plot_data])
+        data_array['../output/img/' + inputline[:filename]] ||= []
+        data_array['../output/img/' + inputline[:filename]] << inputline[:plot_data]
       end
+    end
+    data_array.each_pair do |filename, data|
+      PlotterUtility::generate_plot2(filename, data)
     end
   end
 end

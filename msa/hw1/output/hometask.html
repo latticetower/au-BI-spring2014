@@ -1113,7 +1113,7 @@ cellspacing="0" cellpadding="4">
 <div class="sect1">
 <h2 id="_задание_6">Задание 6.</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>Посчитать матрицу весов(position specic scoring matrix), используя результаты, полученные в пункте 4.</p></div>
+<div class="paragraph"><p>Посчитать матрицу весов(position specific scoring matrix), используя результаты, полученные в пункте 4.</p></div>
 <div class="tableblock">
 <table rules="all"
 width="100%"
@@ -1309,42 +1309,59 @@ cellspacing="0" cellpadding="4">
 <div class="olist loweralpha"><ol class="loweralpha">
 <li>
 <p>
-известных начал CDS в обучающем наборе (из пунктов 1­2)
+известных начал CDS в обучающем наборе (из пунктов 1­2) <span class="image">
+<img src="img/cds_scores.svg" alt="img/cds_scores.svg" />
+</span>
 </p>
 </li>
-</ol></div>
-<div class="paragraph"><p><span class="image">
-<img src="img/cds_scores.svg" alt="img/cds_scores.svg" />
-</span></p></div>
-<div class="olist loweralpha"><ol class="loweralpha">
 <li>
 <p>
-всех подпоследовательностей во всей хромосоме. Приблизить это распределение нормальным.
+всех подпоследовательностей во всей хромосоме. Приблизить это распределение нормальным. <span class="image">
+<img src="img/random_scores.svg" alt="img/random_scores.svg" />
+</span>
+</p>
+</li>
+<li>
+<p>
+сводный график (зеленым - гистограмма a, красным - гистограмма b) <span class="image">
+<img src="img/cds_scores_random_scores.svg" alt="img/cds_scores_random_scores.svg" />
+</span>
+</p>
+</li>
+<li>
+<p>
+сводный график 2 (зеленым - гистограмма a, красным - гистограмма b - отличие в том, что данные для гистограммы b берутся по последовательности, а не генерируются) <span class="image">
+<img src="img/cds_scores_random_scores2.svg" alt="img/cds_scores_random_scores2.svg" />
+</span>
 </p>
 </li>
 </ol></div>
-<div class="paragraph"><p><span class="image">
-<img src="img/random_scores.svg" alt="img/random_scores.svg" />
-</span></p></div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_задание_8">Задание 8.</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>По данным, полученным в предыдущем пункте, постройте график FP, FN в зависимости от отсечки для score, по которой определяется, что последовательность в хромосомы ­ это CDS.</p></div>
+<div class="paragraph"><p>По данным, полученным в предыдущем пункте, постройте график FP, FN в зависимости от отсечки для score, по которой определяется, что последовательность в хромосоме ­ это CDS. <span class="image">
+<img src="img/fp_fn_plot1.svg" alt="img/fp_fn_plot1.svg" />
+</span></p></div>
+<div class="paragraph"><p>То же самое нормализованное: <span class="image">
+<img src="img/fp_fn_plot2.svg" alt="img/fp_fn_plot2.svg" />
+</span></p></div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_задание_9">Задание 9.</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>С  использованием значением отсечки, которое кажется вам разумным, проведите поиск CDS во второй половине хромосомы и проанализируйте результат (FP, FN, sensitivity, speciﬁcity, and PPV).</p></div>
+<div class="paragraph"><p>С  использованием значения отсечки, которое кажется вам разумным, проведите поиск CDS во второй половине хромосомы и проанализируйте результат (FP, FN, sensitivity, speciﬁcity, and PPV).</p></div>
+<div class="paragraph"><p>Я взяла отсечку 2.5, и вот что получилось:</p></div>
+<div class="paragraph"><p><a href="data\task9.txt">Файл с результатами</a></p></div>
 </div>
 </div>
 </div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-03-17 19:40:52 Московское время (зима)
+Last updated 2014-06-06 22:17:51 Московское время (зима)
 </div>
 </div>
 </body>
