@@ -39,7 +39,7 @@ void find_sequences(std::string const &str) {
   }
   long long max_length = str.size() / 2;
   while (max_length > length) {
-   for (size_t i = 0; i < str.size() - length; i++) {
+   for (size_t i = 0; i < str.size() - 2*max_length + 1; i++) {
       for (size_t j = i + max_length; j < str.size() - max_length + 1; j++) {
         size_t len = check_length(str, i, j, max_length);
         if (len == max_length) {
