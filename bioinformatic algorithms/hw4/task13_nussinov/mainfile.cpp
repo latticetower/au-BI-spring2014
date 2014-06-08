@@ -22,9 +22,9 @@ int main(int argc, char** argv) {
   inputStream.close();
   RNAPredictor nussinov_predictor(4, 0.2);
   nussinov_predictor.processSeq(fasta.data[0].second);
-  nussinov_predictor.debug_print(std::cout);
+  //nussinov_predictor.debug_print(std::cout);
   std::vector<std::pair<ResultElType, ResultElType> > result = nussinov_predictor.get_result(0, fasta.data[0].second.size() - 1, fasta.data[0].second);
-  
+
   std::ofstream output_file(argv[2]);
   if (result.size() == 0) {
     output_file << "no pairs of complimentary sequences were found";
