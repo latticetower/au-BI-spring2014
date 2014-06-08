@@ -23,9 +23,11 @@ struct FastaData{
     input_file.close();
     return true;
   }
+  
   void insertPair(std::string const & a,std::string const & b) {
     data.push_back(make_pair(a.substr(0), b.substr(0)));
   }
+
   bool loadFromStream(std::istream& istream) {
     data.clear();
     
