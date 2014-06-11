@@ -93,6 +93,7 @@ class RNAPredictor {
           if (structure_matrix[i][i + pos].cost <= get_cost_for_base_pair(str, i, i + pos)) {
             structure_matrix[i][i + pos].cost = get_cost_for_base_pair(str, i, i + pos);
             structure_matrix[i][i + pos].set_pos(i + 1, i + pos - 1);
+            //i + 1], str[j - 1
             structure_matrix[i][i + pos].is_bp = is_base_pair(str[i], str[i + pos]);
           }
           size_t k;
