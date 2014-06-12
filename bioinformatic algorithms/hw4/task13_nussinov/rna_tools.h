@@ -40,12 +40,12 @@ class RNAPredictor {
 
 
     ValueType get_cost_for_base_pair(std::string const& str,size_t i, size_t j) {
-      ValueType cost = 0;
+      ValueType cost = structure_matrix[i + 1][j - 1].cost;
       if (is_base_pair(str[i], str[j])) {
-        if (j - i < min_loop_size)
+        if (j - i <= min_loop_size)
           return 0;
         cost = structure_matrix[i + 1][j - 1].cost + 1;
-        if (is_base_pair(str[i + 1], str[j - 1]))
+        if (is_base_pair(str[i + 1], str[j - 1]) && (j - 1) - (i + 1) > min_loop_size)
           cost += stacked_score_cost;
         return cost;
       }
@@ -56,7 +56,7 @@ class RNAPredictor {
       //should return max value for all k
       k_ = 0;
       ValueType max_value = 0;
-      for (size_t k = j + 1; k < i; k++) {
+      for (size_t k = i + 1; k < j; k++) {
         ValueType new_max = structure_matrix[i][k].cost + structure_matrix[k + 1][j].cost;
         if (new_max > max_value) {
           max_value = new_max;
@@ -125,7 +125,7 @@ class RNAPredictor {
       os << "structure matrix is "<<std::endl;
       for (size_t i = 0; i< structure_matrix.size(); i++) {
         for (size_t j = 0; j < structure_matrix[i].size(); j++) {
-          os << structure_matrix[i][j].cost << "\t";
+          os << structure_matrix[i][j].cost << " ";
         }
         os << std::endl;
       }
@@ -139,7 +139,7 @@ class RNAPredictor {
       size_t j = current_j;
       size_t length = 0;
       size_t start1 = -1, start2 = -1;
-      while (j - i > this->min_loop_size && structure_matrix[i][j].positions.size() > 0){
+      while (j - i >= this->min_loop_size && structure_matrix[i][j].positions.size() > 0){
         if (structure_matrix[i][j].is_bp) {//append base_pair to i
           start1 = std::min(start1, i);
           start2 = std::min(start2, j);

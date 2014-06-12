@@ -22,9 +22,9 @@ int main(int argc, char** argv) {
   inputStream.close();
   RNAPredictor nussinov_predictor(4, 0.1);
   nussinov_predictor.processSeq(fasta.data[0].second);
-  std::ofstream os("maxtrix.txt");
-  nussinov_predictor.debug_print(os);
-  os.close();
+ // std::ofstream os("maxtrix.txt");
+ // nussinov_predictor.debug_print(os);
+ // os.close();
   std::vector<std::pair<ResultElType, ResultElType> > result = nussinov_predictor.get_result(0, fasta.data[0].second.size() - 1, fasta.data[0].second);
 
   std::ofstream output_file(argv[2]);
