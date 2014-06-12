@@ -89,16 +89,16 @@ class RNAPredictor {
           else {
             structure_matrix[i][i + pos].set_pos(i + 1, i + pos);
           }
-          
-          if (structure_matrix[i][i + pos].cost <= get_cost_for_base_pair(str, i, i + pos)) {
-            structure_matrix[i][i + pos].cost = get_cost_for_base_pair(str, i, i + pos);
+          ValueType max_value = get_cost_for_base_pair(str, i, i + pos);
+          if (structure_matrix[i][i + pos].cost <= max_value && max_value > 0) {
+            structure_matrix[i][i + pos].cost = max_value;
             structure_matrix[i][i + pos].set_pos(i + 1, i + pos - 1);
             //i + 1], str[j - 1
             structure_matrix[i][i + pos].is_bp = is_base_pair(str[i], str[i + pos]);
           }
           size_t k;
-          ValueType max_value = get_cost_for_bifurcation(i, i + pos, k);
-          if (structure_matrix[i][i + pos].cost <= max_value) {
+          max_value = get_cost_for_bifurcation(i, i + pos, k);
+          if (structure_matrix[i][i + pos].cost < max_value && max_value > 0) {
             structure_matrix[i][i + pos].cost = max_value;
             structure_matrix[i][i + pos].set_pos(i, k);
             structure_matrix[i][i + pos].add_pos(k + 1, i + pos);
@@ -133,47 +133,40 @@ class RNAPredictor {
 
     std::vector<std::pair<ResultElType, ResultElType> > get_result(size_t current_i, size_t current_j, std::string const& str) {
       std::vector<std::pair<ResultElType, ResultElType> > result;
-      if(str.size() == 0)
+      if (str.size() == 0)
         return result;
-      size_t i = current_i;
-      size_t j = current_j;
-      size_t length = 0;
-      size_t start1 = -1, start2 = -1;
+      
+      size_t i = current_i, 
+             j = current_j,
+             length = 0,
+             start1 = -1, 
+             start2 = -1;
+
       while (j - i >= this->min_loop_size && structure_matrix[i][j].positions.size() > 0){
+        std::vector<std::pair<size_t, size_t> > next = structure_matrix[i][j].positions;
+        if ((!structure_matrix[i][j].is_bp || next.size() > 1) && length > 0) {
+            // save current result to result array and clear start positions and length
+            result.push_back(std::make_pair(std::make_pair(start1, str.substr(start1, length)),
+                                            std::make_pair(start2, str.substr(start2, length))
+              ));
+            //then clear temp variables
+            length = 0;
+            start1 = -1;
+            start2 = -1;
+        }
+        
         if (structure_matrix[i][j].is_bp) {//append base_pair to i
           start1 = std::min(start1, i);
           start2 = std::min(start2, j);
           length ++;
         }
-        else {
-          if (length > 0) {//add base pair info
-            result.push_back(std::make_pair(std::make_pair(start1, str.substr(start1, length)),
-                                            std::make_pair(start2, str.substr(start2, length))
-              ));
-            //then clear temp variables
-            length = 0;
-            start1 = -1;
-            start2 = -1;
-          }
-        }
 
-        std::vector<std::pair<size_t, size_t> > next = structure_matrix[i][j].positions;
         if (next.size() > 1) {
-          if (length > 0) {//add base pair info
-            result.push_back(std::make_pair(std::make_pair(start1, str.substr(start1, length)),
-                                            std::make_pair(start2, str.substr(start2, length))
-              ));
-            //then clear temp variables
-            length = 0;
-            start1 = -1;
-            start2 = -1;
-          }
           for (std::vector<std::pair<size_t, size_t> >::iterator iter = next.begin(); iter!= next.end(); ++iter) {
             std::vector<std::pair<ResultElType, ResultElType> > r = get_result(iter->first, iter->second, str);
             result.insert(result.begin(), r.begin(), r.end());
           }
           break;
-
         }
         if (next.size () == 1) {
           i = next[0].first;
@@ -183,21 +176,17 @@ class RNAPredictor {
           std::cout << "got some error while processing input sequence\n";
           break;
         }
-
       }
+      //after main loop, something may be unprocessed
       if (length > 0) {//add base pair info
         result.push_back(std::make_pair(std::make_pair(start1, str.substr(start1, length)),
                                         std::make_pair(start2, str.substr(start2, length))
           ));
-        
-        //then clear temp variables
-        length = 0;
-        start1 = -1;
-        start2 = -1;
+        // no need to clear temp variables
       }
-      //std::vector<std::pair<size_t, size_t> > structure_matrix[current_i][current_j].positions
       return result;
     }
+
   private:
      std::vector<std::vector<data_element> > structure_matrix;//contains matrix for nussinov algo
 };
