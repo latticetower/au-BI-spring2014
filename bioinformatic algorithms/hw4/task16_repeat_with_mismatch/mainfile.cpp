@@ -6,7 +6,6 @@
 
 size_t start_i = 0, start_j = 0, length = 0;
 
-//returns current length. if equal to specific size - some repeat found
 size_t check_length(std::string const & str, size_t i, size_t j, size_t max_length) {
   if (max_length == 0)
     return 0;
@@ -27,39 +26,74 @@ size_t check_length(std::string const & str, size_t i, size_t j, size_t max_leng
   return max_length;
 }
 
+//returns current length. if greater then specified - finds max length
+// if not - returns zero
+size_t check_length2(std::string const & str, size_t i, size_t j, size_t max_length) {
+  if (i > j)
+    return check_length2(str, j, i, max_length);
+  size_t current_length = max_length;
+  if (j + current_length > str.size())
+    return 0;//there is no way to improve max_length
+  if (i + current_length >= j)
+    return 0;// there is still no way to improve max_length
+
+  if (str[i + max_length] == str[j + max_length]) {
+    //this means that current str might have greater length than current best string
+    current_length = check_length(str, i, j, max_length + 1);
+  }
+  else {
+    if (j + max_length + 1 >= str.size() || i + max_length + 1 >= j) {
+      return 0;// 
+    }
+    if (str[i + max_length + 1] == str[j + max_length + 1]) {
+      current_length = check_length(str, i, j, max_length + 1);
+    }
+  }
+  return current_length;
+}
+
 void find_sequences(std::string const &str) {
   if (str.size() <= 1) {
     return; //do not update values for positions
   }
   start_i = 0; start_j = 1;
-  length = 1;
+  length = 0;
   if (str.size() <= 3) {
     
     return;
   }
   long long max_length = str.size() / 2;
-  while (max_length > length) {
-   for (size_t i = 0; i < str.size() - 2*max_length + 1; i++) {
-      for (size_t j = i + max_length; j < str.size() - max_length + 1; j++) {
-        size_t len = check_length(str, i, j, max_length);
-        if (len == max_length) {
-          length = max_length;
-          start_i = i;
-          start_j = j;
-          return;
-        }
-        else {
-          if (len > length) {
-            length = len;
-            start_i = i; 
-            start_j = j;
-          }
+  std::vector<size_t> candidate_positions;
+  for (size_t i = 0; i < std::min(str.size() - 2*length + 1, str.size()); i++) {
+    for (size_t j = i + length + 1; j < std::min(str.size() - length + 1, str.size()); j++) {
+      size_t len = check_length2(str, i, j, length);
+      if (len > length) {
+        length = len;
+        start_i = i;
+        start_j = j;
+        candidate_positions.clear();
+      }
+      else {
+        if (len == length) {
+          candidate_positions.push_back(j);
         }
       }
     }
-  max_length --;
-
+    /*if (candidate_positions.size() > 1) {
+      for (std::vector<size_t>::iterator iter = candidate_positions.begin(); iter!= candidate_positions.end()-1; ++iter) {
+        for (std::vector<size_t>::iterator iter2 = iter + 1; iter2 != candidate_positions.end(); ++iter2) {
+          size_t len = check_length2(str, *iter, *iter2, length);
+          if (len > length) {
+            length = len;
+            start_i = *iter;
+            start_j = *iter2;
+          }
+        }
+      }
+      candidate_positions.clear();
+    }*/
   }
+  
 }
 
 int main(int argc, char** argv){
