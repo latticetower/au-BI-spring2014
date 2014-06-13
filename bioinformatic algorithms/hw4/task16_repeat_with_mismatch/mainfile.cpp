@@ -63,7 +63,7 @@ void find_sequences(std::string const &str) {
     
     return;
   }
-  long long max_length = str.size() / 2;
+  
   std::vector<size_t> candidate_positions;
   for (size_t i = 0; i < std::min(str.size() - 2*length + 1, str.size()); i++) {
     for (size_t j = i + length + 1; j < std::min(str.size() - length + 1, str.size()); j++) {
@@ -99,26 +99,28 @@ void find_sequences(std::string const &str) {
 
 void find_sequences2(std::string const& str, Hasher& hasher) {
   start_i = 0; start_j = 1;
-  length = 0;
+  length = 1;
   if (str.size() <= 3) {
+    length = 0;
     return;
   }
-  long long max_length = str.size() / 2;
- // std::vector<size_t> candidate_positions;
+  
+  //std::vector<size_t> candidate_positions;
   for (size_t i = 0; i < std::min(str.size() - 2*length + 1, str.size()); i++) {
-    for (size_t j = hasher.get_next(i, i + length + 1, 0, 1); j < std::min(str.size() - length + 1, str.size()); j = hasher.get_next(i, i + length + 1, j, length)) {
+    size_t divider = i + length;
+    for (size_t j = hasher.get_next(i, divider, 0, 1); j < std::min(str.size() - length + 1, str.size()); j = hasher.get_next(i, divider, j, length)) {
       size_t len = hasher.CheckLength(i, j, length);
       if (len > length) {
         length = len;
         start_i = i;
         start_j = j;
-       //candidate_positions.clear();
+        //candidate_positions.clear();
       }
-     // else {
-    //   // if (len == length) {
-         /// candidate_positions.push_back(j);
-      //  }
-     // }
+      /*else {
+        if (len == length) {
+          candidate_positions.push_back(j);
+        }
+      }*/
     }
     /*if (candidate_positions.size() > 1) {
       for (std::vector<size_t>::iterator iter = candidate_positions.begin(); iter!= candidate_positions.end()-1; ++iter) {
@@ -133,6 +135,7 @@ void find_sequences2(std::string const& str, Hasher& hasher) {
       }
       candidate_positions.clear();
     }*/
+    //
   }
   
 }

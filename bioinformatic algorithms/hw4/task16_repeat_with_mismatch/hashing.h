@@ -51,22 +51,9 @@ class Hasher {
           if (i >= k && k < HASHES_AMOUNT2) {
             std::set<size_t> res = get_all_with_one_mismatch(hash_container[k][i - k], powers[k], k + 1); 
             for (std::set<size_t>::iterator iter = res.begin(); iter != res.end(); ++iter) {
-              if (last_positions[k][*iter] < string_size) {
-                if (last_positions[k][*iter] < i - k) {
-                  std::set<size_t> res2 = get_all_with_one_mismatch(hash_container[k][last_positions[k][*iter]], powers[k], k + 1);
-                  for (std::set<size_t>::iterator iter2 = res2.begin(); iter2 != res2.end(); ++iter2) {
-                    if (last_positions[k][*iter2] < i - k) {
-                      next_positions[k][last_positions[k][*iter2]] = i - k;
-                      last_positions[k][*iter2] = i - k;
-                    }
-                  }
-                }
-
-              }   
-              else {
-                  if (last_positions[k][*iter] > string_size)
-                    last_positions[k][*iter] = i - k;
-                }
+              if (last_positions[k][*iter] < string_size && last_positions[k][*iter] < i - k) 
+                next_positions[k][last_positions[k][*iter]] = i - k;
+              last_positions[k][*iter] = i - k;
               //last_positions[k][*iter] = i - k;
             }
             
@@ -81,29 +68,56 @@ class Hasher {
     // length is the current hash 
     std::set<size_t> get_all_with_one_mismatch(size_t value, size_t power, size_t length) {
       std::set<size_t> result;
-      if (length <= 1) {
-        result.insert(value % power);
-        return result;
-      }
+      //if (length <= 1) {
+      //  result.insert(value % power);
+      //  return result;
+      //}
       for (size_t i = 0; i < length; i ++) {
-        result.insert(value & ((power - 1) ^ (3 << 2*i)));
+        for (size_t k = 0; k < 4; k++) {
+          result.insert((value & ((power - 1) ^ (3 << 2*i))) ^ (k << 2*i));
+        }
       }
       return result;
     }
+
     size_t get_next(size_t i, size_t min_pos, size_t last_found, size_t length) {
+      //std::cout << i << " " << min_pos << " " << last_found << " " << length << std::endl;
+      if (i > min_pos) {
+        std::cout << "got wrong min_pos" << std::endl;
+        return -1;
+      }
+      if (last_found < min_pos && last_found > i) {
+        std::cout << "got wrong last_found" << std::endl;
+        return -1;
+      }
       size_t k = std::min(length, HASHES_AMOUNT2);
+      
       if (k == 0) 
         k = 1;
-      if (last_found < string_size) {
-        return next_positions[k - 1][last_found];
-      }
-      if (last_found == 0) {
+      
+      if (last_found < min_pos) {
+        size_t k = std::min(length, HASHES_AMOUNT);
+        if (hash_container.size() < k || hash_container[k-1].size() <= i) {
+          std::cout << "got some problem with hash_container1"<<std::endl;
+        }
         size_t val0 = hash_container[k - 1][i];
         size_t current = min_pos;
+        if (hash_container.size() < k || hash_container[k-1].size() <= current) {
+          std::cout << "got some problem with hash_container2"<<std::endl;
+        }
         while (current< string_size && !is_mismatch(val0, hash_container[k - 1][current])) {
           current++;
+          if (hash_container.size() < k || hash_container[k-1].size() <= current) {
+             std::cout << "got some problem with hash_container3"<<std::endl;
+           }
         }
         return current;
+      }
+      if (last_found < string_size) {
+        if (hash_container.size() < k || hash_container[k-1].size() <= last_found) {
+          std::cout << "got some problem with hash_container last_found"<<std::endl;
+        }
+        return next_positions[k - 1][last_found];
       }
       return last_found;
     } 
@@ -157,7 +171,7 @@ class Hasher {
     size_t CheckLength(size_t i, size_t j, size_t expected_length, bool allow_mismatch = true) {
       if (i > j)
         return CheckLength(j, i, expected_length, allow_mismatch);
-      if (j + expected_length >= string_size)
+      if (j + expected_length > string_size)
         return 0;// string could not be extended, we don't need it. we already know some string of expected_length
       if (i + expected_length > j) {
         CheckResult ch = CheckEquality1(i, j, expected_length, allow_mismatch);
@@ -170,7 +184,7 @@ class Hasher {
       }
       else {
         if (j + expected_length + 1 >= string_size)
-          return 0;
+          return FindLength(i, j, j, allow_mismatch);
         if (i + expected_length + 1 == j)
           return FindLength(i, j, j, allow_mismatch);
         if (allow_mismatch && chars_equal(i + expected_length + 1, j + expected_length + 1)) {
@@ -185,13 +199,11 @@ class Hasher {
     //method finds expected string length and returns it
     // j_start is the start position of the second string
     size_t FindLength(size_t i, size_t j_start, size_t j, bool allow_mismatch = true) {
-      size_t length = 0;
       if (i == j_start)
         return 0;
-      if (j_start - i <= HASHES_AMOUNT) {//checks overlap
-        return find_length(i, j, j_start - i, allow_mismatch);
+      if (j_start - i <= HASHES_AMOUNT || string_size - j <= HASHES_AMOUNT) {//checks overlap
+        return find_length(i, j, std::min(string_size - j, j_start - i), allow_mismatch);
       }
-      
       if (hash_container[HASHES_AMOUNT - 1][i] == hash_container[HASHES_AMOUNT - 1][j]) {
         return HASHES_AMOUNT + FindLength(i + HASHES_AMOUNT, j_start, j + HASHES_AMOUNT, allow_mismatch);
       }
@@ -224,6 +236,10 @@ class Hasher {
 
     // for given small string returns if there is one mismatch or not
     size_t find_length(size_t i, size_t j, size_t length, bool allow_mismatch) {
+      if (i > j)
+        return find_length(j, i, length, allow_mismatch);
+      if (j + length > string_size)
+        return find_length(i, j, (string_size > j ? string_size - j : 0), allow_mismatch);
       int error_count = 0;
       for (size_t k = 0; k < length; k++) {
         if (hash_container[0][i + k] != hash_container[0][j + k]) {
