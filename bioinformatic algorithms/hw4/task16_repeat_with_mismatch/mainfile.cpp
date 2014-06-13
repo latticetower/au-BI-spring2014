@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include "fasta_data.h"
+#include "hashing.h"
 
 size_t start_i = 0, start_j = 0, length = 0;
 
@@ -96,6 +97,49 @@ void find_sequences(std::string const &str) {
   
 }
 
+void find_sequences2(std::string const& str, Hasher& hasher) {
+  start_i = 0; start_j = 1;
+  length = 0;
+  if (str.size() <= 3) {
+    return;
+  }
+  long long max_length = str.size() / 2;
+ // std::vector<size_t> candidate_positions;
+  for (size_t i = 0; i < std::min(str.size() - 2*length + 1, str.size()); i++) {
+    for (size_t j = hasher.get_next(i, i + length + 1, 0); j < std::min(str.size() - length + 1, str.size()); j = hasher.get_next(i, i + length + 1, j)) {
+      size_t len = hasher.CheckLength(i, j, length);
+      if (len > length) {
+        length = len;
+        start_i = i;
+        start_j = j;
+       //candidate_positions.clear();
+      }
+     // else {
+    //   // if (len == length) {
+         /// candidate_positions.push_back(j);
+      //  }
+     // }
+    }
+    /*if (candidate_positions.size() > 1) {
+      for (std::vector<size_t>::iterator iter = candidate_positions.begin(); iter!= candidate_positions.end()-1; ++iter) {
+        for (std::vector<size_t>::iterator iter2 = iter + 1; iter2 != candidate_positions.end(); ++iter2) {
+          size_t len = hasher.CheckLength(*iter, *iter2, length);
+          if (len > length) {
+            length = len;
+            start_i = *iter;
+            start_j = *iter2;
+          }
+        }
+      }
+      candidate_positions.clear();
+    }*/
+  }
+  
+}
+
+
+
+
 int main(int argc, char** argv){
   if (argc < 3) {
     std::cout << "Please, provide input file name as a first parameter, and output file name as a second parameter" << std::endl;
@@ -111,7 +155,9 @@ int main(int argc, char** argv){
   inputStream.close();
 
   std::ofstream output_file(argv[2]);
-  find_sequences(fasta.data[0].second);
+  Hasher hasher;
+  hasher.PrepareHash(fasta.data[0].second);
+  find_sequences2(fasta.data[0].second, hasher);
   if (length == 0) {
     output_file << "No data, no sequences.\n";
   }
