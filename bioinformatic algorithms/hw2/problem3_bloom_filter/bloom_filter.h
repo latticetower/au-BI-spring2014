@@ -25,8 +25,8 @@ class BloomFilter {
   int findPrimeNextTo(int k);
 
 public:
-  BloomFilter(int n, int samples_count, int kmer_size): _n(n), _kmer_size(kmer_size) {
-    _m = findPrimeNextTo(n + samples_count + 1);
+  BloomFilter(int n, int samples_count, int kmer_size): _n(n), _probability(0.05), _kmer_size(kmer_size) {
+    _m = findPrimeNextTo(static_cast<int>(-1.0*n*log(_probability)/(log(2.0)*log(2.0))));
     _k = static_cast<int>(ceil(1.0*_m/_n*log(2.0)));
     _bits.resize(_m, false);
     constructHashFunctions(kmer_size);

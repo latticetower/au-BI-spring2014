@@ -10,7 +10,7 @@
 StringContainer get_kmers(std::string sample_string, int kmer_size) {
   StringContainer kmers_container;
   
-  for (int i = 0; i < static_cast<int>(sample_string.size()) - kmer_size; i ++) {
+  for (int i = 0; i < static_cast<int>(sample_string.size()) - kmer_size + 1; i ++) {
     kmers_container.insert(sample_string.substr(i, kmer_size));
   }
   return kmers_container;
@@ -62,6 +62,11 @@ int main(int argc, char**argv) {
   output_file.precision(2);
   output_file.setf(std::ios::showpoint);
   output_file.setf(std::ios::fixed);
+  if (kmers_container.size() < 1) {
+    output_file << "input string length is less than kmer size, no kmers were found";
+    output_file.close();
+    return 0;
+  }
   output_file << "FP = " << bloom_filter.getProbability()*100 << " % " << std::endl;
   for (std::vector<std::string>::iterator iter = test_samples.begin(); iter != test_samples.end(); ++iter) {
     output_file << (bloom_filter.isKmerInString(*iter) ? "1" : "0") << std::endl;
