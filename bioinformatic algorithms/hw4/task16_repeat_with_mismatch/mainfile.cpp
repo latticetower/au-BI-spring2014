@@ -106,7 +106,7 @@ void find_sequences2(std::string const& str, Hasher& hasher) {
   long long max_length = str.size() / 2;
  // std::vector<size_t> candidate_positions;
   for (size_t i = 0; i < std::min(str.size() - 2*length + 1, str.size()); i++) {
-    for (size_t j = hasher.get_next(i, i + length + 1, 0); j < std::min(str.size() - length + 1, str.size()); j = hasher.get_next(i, i + length + 1, j)) {
+    for (size_t j = hasher.get_next(i, i + length + 1, 0, 1); j < std::min(str.size() - length + 1, str.size()); j = hasher.get_next(i, i + length + 1, j, length)) {
       size_t len = hasher.CheckLength(i, j, length);
       if (len > length) {
         length = len;

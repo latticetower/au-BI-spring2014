@@ -1,10 +1,11 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <set>
 
 class Hasher {
   public:
-    Hasher(size_t amount = 15): HASHES_AMOUNT(amount) {
+    Hasher(size_t amount = 15): HASHES_AMOUNT(amount), HASHES_AMOUNT2(4) {
       powers.clear();
       size_t pow = 4;
       for (size_t i = 0; i < amount; i ++) {
@@ -13,12 +14,29 @@ class Hasher {
       }
     }
 
+    inline bool is_mismatch(size_t a, size_t b) {
+      size_t res = a^b;
+      if (res == 0)
+        return true;
+      size_t res2 = 0;
+      while (res > 4) {
+        res2 = res % 4;
+        res >>= 2;
+      }
+      return !(res2 && res);
+    }
+
     void PrepareHash(std::string const & str) {
       string_size = str.size();
       hash_container.clear();
       hash_container.resize(HASHES_AMOUNT, std::vector<size_t>(string_size, 0));
-      next_positions.resize(string_size, -1);
-      std::vector<size_t> last_positions(4, -1);
+      next_positions.resize(HASHES_AMOUNT2);
+
+      std::vector<std::vector<size_t> > last_positions(HASHES_AMOUNT2);
+      for (size_t i = 0; i < HASHES_AMOUNT2; i++) {
+        last_positions[i].resize(powers[i], -1);
+        next_positions[i].resize(string_size, -1);
+      }
 
       for (size_t i = 0; i < string_size; i++) {
         size_t current_letter = get_letter_hash(str[i]);
@@ -29,28 +47,68 @@ class Hasher {
           else {
             hash_container[k][0] = (hash_container[k][0] << 2) ^ current_letter;
           }
+          // set next position
+          if (i >= k && k < HASHES_AMOUNT2) {
+            std::set<size_t> res = get_all_with_one_mismatch(hash_container[k][i - k], powers[k], k + 1); 
+            for (std::set<size_t>::iterator iter = res.begin(); iter != res.end(); ++iter) {
+              if (last_positions[k][*iter] < string_size) {
+                if (last_positions[k][*iter] < i - k) {
+                  std::set<size_t> res2 = get_all_with_one_mismatch(hash_container[k][last_positions[k][*iter]], powers[k], k + 1);
+                  for (std::set<size_t>::iterator iter2 = res2.begin(); iter2 != res2.end(); ++iter2) {
+                    if (last_positions[k][*iter2] < i - k) {
+                      next_positions[k][last_positions[k][*iter2]] = i - k;
+                      last_positions[k][*iter2] = i - k;
+                    }
+                  }
+                }
+
+              }   
+              else {
+                  if (last_positions[k][*iter] > string_size)
+                    last_positions[k][*iter] = i - k;
+                }
+              //last_positions[k][*iter] = i - k;
+            }
+            
+          }
+          //
         }
-        // set next position
-        if (last_positions[current_letter] < string_size)
-          next_positions[last_positions[current_letter]] = i;
-        last_positions[current_letter] = i;
+       
       }
     }
-    size_t get_next(size_t i, size_t min_pos, size_t last_found) {
+
+    // value is the value for witch we construct hash.
+    // length is the current hash 
+    std::set<size_t> get_all_with_one_mismatch(size_t value, size_t power, size_t length) {
+      std::set<size_t> result;
+      if (length <= 1) {
+        result.insert(value % power);
+        return result;
+      }
+      for (size_t i = 0; i < length; i ++) {
+        result.insert(value & ((power - 1) ^ (3 << 2*i)));
+      }
+      return result;
+    }
+    size_t get_next(size_t i, size_t min_pos, size_t last_found, size_t length) {
+      size_t k = std::min(length, HASHES_AMOUNT2);
+      if (k == 0) 
+        k = 1;
       if (last_found < string_size) {
-        return next_positions[last_found];
+        return next_positions[k - 1][last_found];
       }
       if (last_found == 0) {
-        size_t current = next_positions[i];
-        while (current < min_pos) {
-          current = next_positions[current];
+        size_t val0 = hash_container[k - 1][i];
+        size_t current = min_pos;
+        while (current< string_size && !is_mismatch(val0, hash_container[k - 1][current])) {
+          current++;
         }
         return current;
       }
       return last_found;
     } 
   private:
-    std::vector<size_t> next_positions;
+    std::vector<std::vector<size_t> > next_positions;
   public:
     bool CheckEquality(size_t i, size_t j, size_t length, bool allow_mismatch = true) {
       CheckResult ch = CheckEquality1(i, j, length, allow_mismatch);
@@ -190,6 +248,7 @@ class Hasher {
     }
   private:
     size_t HASHES_AMOUNT;
+    size_t HASHES_AMOUNT2;
     size_t string_size;
     std::vector<size_t> powers;
     std::vector<std::vector<size_t> > hash_container;
