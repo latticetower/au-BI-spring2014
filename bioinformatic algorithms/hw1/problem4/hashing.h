@@ -62,13 +62,13 @@ class RevComplHasher {
     }
 
     //method returns pair - start position and length
-    std::pair<size_t, size_t> get_max_substr(size_t min_length, size_t max_length) {
+    std::pair<size_t, size_t> get_max_substr(size_t min_length, size_t max_length, size_t last_pos) {
       if (max_length > min_length + 1) {
         size_t median_length = min_length + (max_length - min_length) / 2;
         size_t pos = get_substr(median_length);
-        return (pos < string_size? get_max_substr(median_length, max_length) : get_max_substr(min_length, median_length));
+        return (pos < string_size? get_max_substr(median_length, max_length, pos) : get_max_substr(min_length, median_length, -1));
       }
-      return std::make_pair(get_substr(min_length), min_length);
+      return std::make_pair(last_pos, min_length);
     }
     
 
