@@ -82,7 +82,7 @@ class RevComplHasher {
       std::vector<size_t> hash, rev_hash;
       size_t buf = 0, rev_buf = 0;
       //suppose median length is greater than HASHES_AMOUNT.
-      size_t k = std::min(HASHES_AMOUNT, median_length);
+     // size_t k = std::min(HASHES_AMOUNT, median_length);
       size_t i = 0;
       for (i = 0; i < median_length; i ++) {
         buf = (buf + hash_container[0][i]) % GREAT_PRIME;
