@@ -73,30 +73,32 @@ class RevComplHasher {
 
     //method returns index of substring of given length
     size_t get_substr(size_t median_length, size_t last_pos) {
-      std::cout << "get substr called with length "<< median_length << ", starting from " << last_pos << std::endl;
+      std::cout << "get substr called with length "<< median_length << ", starting from " << last_pos;
       if (median_length == 0)
         return 0;
       //prepare rolling hash, modulo great prime (> 2^15 = first found via wolframalpha - 1073742037)
       size_t start_position = 0;
       if (last_pos < string_size)
         start_position = last_pos;
+      std::cout << ", actual start position is "<< start_position << std::endl;
       
       std::vector<size_t> hash, rev_hash;
-      hash.resize(string_size - median_length + 1, 0);
-      rev_hash.resize(string_size - median_length + 1, 0);
+      hash.resize(string_size, 0);
+      rev_hash.resize(string_size, 0);
       
       size_t buf = 0, rev_buf = 0;
       //suppose median length is greater than HASHES_AMOUNT.
      // size_t k = std::min(HASHES_AMOUNT, median_length);
       size_t i = 0;
       for (i = 0; i < median_length; i ++) {
-        buf = (buf + hash_container[0][i]) % GREAT_PRIME;
+        buf = (buf + hash_container[0][start_position + i]) % GREAT_PRIME;
         rev_buf = (rev_buf +  reverse_hash_container[0][i]) % GREAT_PRIME;
       }
       hash[start_position] = buf;
       rev_hash[0] = rev_buf;
-      for (; start_position + i - median_length + 1 < string_size; i++) {
-        buf = (buf + hash_container[0][i] - hash_container[0][i - median_length]) % GREAT_PRIME;
+      for (; start_position + i < string_size; i++) {
+        //std::cout << start_position + i - median_length + 1<< " " <<  i-median_length << " " << start_position + i << std::endl;
+        buf = (buf + hash_container[0][start_position + i] - hash_container[0][start_position + i - median_length]) % GREAT_PRIME;
         hash[start_position + i - median_length + 1] = buf;
         rev_buf = (rev_buf +  reverse_hash_container[0][i] - reverse_hash_container[0][i - median_length]) % GREAT_PRIME;
         rev_hash[i - median_length + 1] = rev_buf;
