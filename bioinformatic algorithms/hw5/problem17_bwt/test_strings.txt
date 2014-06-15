@@ -1,4 +1,14 @@
+>seq3
+gaac
 >seq1
-AAAA
+aa
 >seq2
-AACC
+gaacaaa
+>seq4
+caaa
+>seq5
+a
+>seq6 
+aaa
+>seq7
+

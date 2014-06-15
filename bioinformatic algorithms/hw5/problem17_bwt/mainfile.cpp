@@ -1,9 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include "suffix_tree.h"
-#include "newick_writer.h"
 #include "fasta_data.h"
-#include "bwt_builder.h"
+#include "bwt_tools.h"
 
 int main(int argc, char** argv) {
   if (argc < 4) {
@@ -28,24 +26,22 @@ int main(int argc, char** argv) {
   strings_fasta.loadFromStream(inputStream2);
   inputStream2.close();
   //now we have 2 fasta objects with given text and set of given substrings
-
-  SuffixTree tree(text_fasta.data[0].second);
-  BWTBuilder bwt_builder;
-  tree.acceptVisitor(&bwt_builder);
-  NewickWriter newick;
-  tree.acceptVisitor(&newick);
-  std::vector<long> result = bwt_builder.getBWT();
+  //foo(text_fasta.data[0].second);
+  BWTBuilder builder;
+  builder.Build(text_fasta.data[0].second + "$");
   std::ofstream output_file(argv[3]);
-  output_file << ">tree processed as" << std::endl << newick.getResult() << std::endl;
-    
-  for (std::vector<long>::iterator iter = result.begin(); iter!= result.end(); ++iter) {
-    output_file << *iter << "\t";
+  for (std::vector<std::pair<std::string, std::string> >::iterator iter = strings_fasta.data.begin(); iter != strings_fasta.data.end(); ++iter) {
+    output_file << ">" << iter->first << std::endl;
+    std::set<size_t> positions = builder.find(iter->second);
+    if (positions.size() == 0) {
+      output_file << "no occurences found";
+    }
+    for (std::set<size_t>::iterator iter2 = positions.begin(); iter2 != positions.end(); ++iter2) {
+      output_file << *iter2 << '\t';
+    }
+    output_file << std::endl;
   }
   output_file.close();
-  //std::ofstream of("data.txt");
-  //NewickWriter writer;
-  //tree.acceptVisitor(&writer);
-  //of << writer.getResult();
-  //of.close();
+
   return 0;
 }
