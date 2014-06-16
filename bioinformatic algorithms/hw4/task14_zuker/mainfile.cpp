@@ -4,6 +4,8 @@
 #include <set>
 #include <map>
 #include "fasta_data.h"
+#include "energies_info.h"
+#include "rna_tools.h"
 
 
 int main(int argc, char** argv){
@@ -20,9 +22,13 @@ int main(int argc, char** argv){
   FastaData fasta;
   fasta.loadFromStream(inputStream);
   inputStream.close();
+  EnergiesInfo ei;
+  ei.LoadFromFile("energies.txt");
+  RNAEnergiesPredictor zuker_predictor(ei);
+  zuker_predictor.ProcessSeq(fasta.data[0].second);
+  std::cout << "opt energy is " << zuker_predictor.getEnergy() << std::endl;
   
   std::ofstream output_file(argv[2]);
-
   
   output_file.close();
   return 0;
