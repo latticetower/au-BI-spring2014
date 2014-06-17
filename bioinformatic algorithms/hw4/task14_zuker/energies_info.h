@@ -21,7 +21,7 @@ class EnergiesInfo {
     static const int INF = 10000;
 
     enum RNANucleotide{A, C, G, U};
-    enum Structure{Bulge, Hairpin, InternalLoop};
+    enum Structure{Bulge, Hairpin, InternalLoop, None, BulgeOrLoop, Stacked, Composed, ComposedVM, Simple};
 
     void LoadFromFile(std::string const&filename) {
       std::ifstream f(filename);
@@ -32,8 +32,14 @@ class EnergiesInfo {
 
     // methods for getting specific portion of energies
     double get(Structure s, int i) const {
+      std::map<Structure, std::map<int, double> >::const_iterator inner_map = structure_energies.find(s);
+      if (inner_map == structure_energies.end())
+        return INF;
+      if (inner_map->second.find(i) == inner_map->second.end())
+        return INF;
       return structure_energies.at(s).at(i);
     }
+
     double get(char a1, char a2, char b1, char b2) const {
       std::map<NucleotidePair, std::map<NucleotidePair, double> >::const_iterator iter = free_energies.find(getNucleotidePair(a1, a2));
       if (iter == free_energies.end()) 
@@ -118,6 +124,8 @@ class EnergiesInfo {
       if (ch == 'u' || ch == 'U')
         return RNANucleotide::U;
     }
+
+
     
     std::map<NucleotidePair, std::map<NucleotidePair, double> > free_energies;
     std::map<Structure, std::map<int, double> > structure_energies;

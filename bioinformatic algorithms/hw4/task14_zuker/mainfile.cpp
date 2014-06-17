@@ -27,8 +27,20 @@ int main(int argc, char** argv){
   RNAEnergiesPredictor zuker_predictor(ei);
   zuker_predictor.ProcessSeq(fasta.data[0].second);
   std::cout << "opt energy is " << zuker_predictor.getEnergy() << std::endl;
-  
   std::ofstream output_file(argv[2]);
+  if (fasta.data[0].second.size() < 1) {
+    output_file << "sequence size is invalid";
+    return 0;
+  }
+  std::vector<std::pair<ResultElType, ResultElType> > result = zuker_predictor.get_result(0, fasta.data[0].second.size() - 1, fasta.data[0].second);
+
+  
+  if (result.size() == 0) {
+    output_file << "no pairs of complimentary sequences were found";
+  }
+  for (size_t i = 0; i < result.size(); i++) {
+    output_file << result[i].first.first << "," << result[i].first.second << "-" << result[i].second.first << "," << result[i].second.second << std::endl;
+  }
   
   output_file.close();
   return 0;
