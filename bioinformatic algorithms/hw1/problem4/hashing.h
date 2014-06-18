@@ -73,36 +73,34 @@ class RevComplHasher {
 
     //method returns index of substring of given length
     size_t get_substr(size_t median_length, size_t last_pos) {
-      std::cout << "get substr called with length "<< median_length << ", starting from " << last_pos;
+      //std::cout << "get substr called with length "<< median_length << ", starting from " << last_pos;
       if (median_length == 0)
         return 0;
       //prepare rolling hash, modulo great prime (> 2^15 = first found via wolframalpha - 1073742037)
       size_t start_position = 0;
       if (last_pos < string_size)
         start_position = last_pos;
-      std::cout << ", actual start position is "<< start_position << std::endl;
+      //std::cout << ", actual start position is "<< start_position << std::endl;
       
       std::vector<size_t> hash, rev_hash;
       hash.resize(string_size, 0);
       rev_hash.resize(string_size, 0);
       
       size_t buf = 0, rev_buf = 0;
-      size_t pow = 1 << 2;
       //suppose median length is greater than HASHES_AMOUNT.
      // size_t k = std::min(HASHES_AMOUNT, median_length);
       size_t i = 0;
       for (i = 0; i < median_length; i ++) {
-        buf = ((buf << 2) + hash_container[0][start_position + i]) % GREAT_PRIME;
-        rev_buf = ((rev_buf << 2) +  reverse_hash_container[0][i]) % GREAT_PRIME;
-        pow = (pow << 2)*GREAT_PRIME;
+        buf = (buf + hash_container[0][start_position + i]) % GREAT_PRIME;
+        rev_buf = (rev_buf +  reverse_hash_container[0][i]) % GREAT_PRIME;
       }
       hash[start_position] = buf;
       rev_hash[0] = rev_buf;
       for (; start_position + i < string_size; i++) {
         //std::cout << start_position + i - median_length + 1<< " " <<  i-median_length << " " << start_position + i << std::endl;
-        buf = ((buf << 2) % GREAT_PRIME + hash_container[0][start_position + i] - (pow*hash_container[0][start_position + i - median_length] % GREAT_PRIME)) % GREAT_PRIME;
+        buf = (buf + hash_container[0][start_position + i] - hash_container[0][start_position + i - median_length]) % GREAT_PRIME;
         hash[start_position + i - median_length + 1] = buf;
-        rev_buf = ((rev_buf << 2) % GREAT_PRIME +  reverse_hash_container[0][i] - (pow*reverse_hash_container[0][i - median_length]%GREAT_PRIME)) % GREAT_PRIME;
+        rev_buf = (rev_buf +  reverse_hash_container[0][i] - reverse_hash_container[0][i - median_length]) % GREAT_PRIME;
         rev_hash[i - median_length + 1] = rev_buf;
       }
 
@@ -122,15 +120,6 @@ class RevComplHasher {
 
     //helper method. returns next position of hash prefix equal to last one
     size_t get_next(size_t i, size_t min_rev_pos, size_t last_found, size_t length, bool first_call) {
-      //std::cout << i << " " << min_pos << " " << last_found << " " << length << std::endl;
-      /*if (i > min_pos) {
-        std::cout << "got wrong min_pos" << std::endl;
-        return -1;
-      }
-      if (last_found < min_pos && last_found > i) {
-        std::cout << "got wrong last_found" << std::endl;
-        return -1;
-      }*/
       //std::cout << rev_i << " " << min_pos << " " << last_found << " " << length << " " << first_call << std::endl;
       size_t k = std::min(length, HASHES_AMOUNT2);
       

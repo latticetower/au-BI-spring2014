@@ -25,7 +25,7 @@ int main(int argc, char** argv){
  
   RevComplHasher hasher;
   hasher.PrepareHash(fasta.data[0].second);
-  std::pair<size_t, size_t> result = hasher.get_max_substr(0, fasta.data[0].second.size()/2, -1);
+  std::pair<size_t, size_t> result = hasher.get_max_substr(0, fasta.data[0].second.size()/2 + 1, -1);
   if (result.second == 0) {
     output_file << "no substring with reverse complement substring found";
   }
