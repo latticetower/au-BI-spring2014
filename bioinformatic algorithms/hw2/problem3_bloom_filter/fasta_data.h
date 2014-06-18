@@ -33,7 +33,7 @@ struct FastaData{
   }
 
   //the following method somehow tries to read fasta file
-  void processString(std::string const& str) {
+  void processString(std::string & str) {
     if (str.length() == 0)
       return;
     if (str[0] == '>') {
@@ -41,6 +41,7 @@ struct FastaData{
     }
     else {
       if (data.size() > 0) {
+        std::transform(str.begin(), str.end(), str.begin(), ::tolower);
         data.back().second.append(str);
       }
       else return;

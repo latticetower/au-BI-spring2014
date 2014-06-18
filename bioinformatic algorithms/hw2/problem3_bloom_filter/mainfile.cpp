@@ -7,7 +7,7 @@
 #include "helper_functions.h"
 #include "bloom_filter.h"
 
-StringContainer get_kmers(std::string sample_string, int kmer_size) {
+StringContainer get_kmers(std::string &sample_string, int kmer_size) {
   StringContainer kmers_container;
   
   for (int i = 0; i < static_cast<int>(sample_string.size()) - kmer_size + 1; i ++) {
@@ -27,6 +27,7 @@ bool read_second_file(char const *input_filename, int& kmer_size, std::vector<st
   while (!input_file2.eof()) {
     std::getline(input_file2, buffer);
     buffer.erase(std::remove_if(buffer.begin(), buffer.end(), ::iscntrl), buffer.end());//removes carriage return from buffer - just in case
+    std::transform(buffer.begin(), buffer.end(), buffer.begin(), ::tolower);
     if (buffer.size() > 0)
       test_samples.push_back(buffer);
   }
@@ -67,9 +68,21 @@ int main(int argc, char**argv) {
     output_file.close();
     return 0;
   }
-  output_file << "FP = " << bloom_filter.getProbability()*100 << " % " << std::endl;
+  std::vector<int> results;
+  int fp_count = 0;
   for (std::vector<std::string>::iterator iter = test_samples.begin(); iter != test_samples.end(); ++iter) {
-    output_file << (bloom_filter.isKmerInString(*iter) ? "1" : "0") << std::endl;
+    if (bloom_filter.isKmerInString(*iter)) {
+      results.push_back(1);
+      if (kmers_container.find(*iter) == kmers_container.end())
+        fp_count ++;
+    }
+    else {
+      results.push_back(0);
+    }
+  }
+  output_file << "FP = " << 100.0*fp_count/results.size() << " % " << std::endl;
+  for (std::vector<int>::iterator iter = results.begin(); iter != results.end(); ++iter) {
+    output_file << *iter << std::endl;
   }
   output_file.close();
 }
