@@ -21,11 +21,28 @@ class DistanceEstimator{
     DistanceEstimator(int k_): k(k_) {
     }
 
-    std::pair<int, std::vector<ArrowDirection> const* > levenshtein_dist(std::string & str_a, std::string & str_b) {
+    ~DistanceEstimator() {
+      //for (size_t i = 0; i < directions_list.size(); i++) {
+      //  delete directions_list[i];
+      //}
+      //directions_list.clear();
+    }
+  private:
+    void update_directions(int index, ArrowDirection direction, int link_to) {
+      if (directions[link_to] != NULL && directions[link_to]->last_direction == direction && index == link_to) {
+        directions[link_to]->count++;
+        return;
+      }
+      directions[index] = std::shared_ptr<DirectionHolder>(new DirectionHolder(direction, directions[link_to]));
+    }
+  public:
+    std::pair<int, std::vector<std::pair<ArrowDirection, int> > > levenshtein_dist(std::string & str_a, std::string & str_b) {
       if (str_a.size() < str_b.size())
         return levenshtein_dist(str_b, str_a);
+      std::vector<int> holder ;
       holder.resize(2*k + 1, 0);
-      directions.resize(2*k + 1, NULL);
+      directions.clear();
+      directions.resize(2*k + 1);
       //initialization
       holder[k] = 0;
       int min_value = 0, min_position = 0;
@@ -33,11 +50,11 @@ class DistanceEstimator{
         holder[k - i - 1] = holder[k - i] + GAP_COST;
         holder[k + i + 1] = holder[k + i] + GAP_COST;
     
-        directions[k + i + 1] = std::shared_ptr<DirectionHolder>(new DirectionHolder(Down, directions[k + i]));
-        directions[k - i - 1] = std::shared_ptr<DirectionHolder>(new DirectionHolder(Left, directions[k - i]));
+        update_directions(k + i + 1, Down, k + i);
+        update_directions(k - i - 1, Left, k - i);
       }
 
-      backtracing_path.clear();
+      std::vector<std::pair<ArrowDirection, int> > backtracing_path;
 
       for (int i = 0; i < (int)str_a.size(); i++) {
         int j = k - std::min(i + 1, k);
@@ -48,9 +65,9 @@ class DistanceEstimator{
         else {//i>=k
           ArrowDirection direction = set_value(holder, i, -1, k, str_a, str_b);
           if (direction == Match)
-            directions[0] = std::shared_ptr<DirectionHolder>(new DirectionHolder(direction, directions[0]));
+            update_directions(0, direction, 0);
           if (direction == Left) 
-            directions[0] = std::shared_ptr<DirectionHolder>(new DirectionHolder(direction, directions[1]));
+            update_directions(0, direction, 1);
           //holder[0] = std::min(holder[0] + match(str_a[i], str_b[i - k]), holder[1] + GAP_COST);
           min_value = holder[0];
           min_position = 0;
@@ -59,11 +76,11 @@ class DistanceEstimator{
         for ( ; j < std::min(2*k - 1, (int)str_b.size() + k - i - 1); j ++) {
           ArrowDirection direction = set_value(holder, i, j, k, str_a, str_b);
           if (direction == Match)
-            directions[j + 1] = std::shared_ptr<DirectionHolder>(new DirectionHolder(direction, directions[j + 1]));
+            update_directions(j + 1, direction, j + 1);
           if (direction == Left) 
-            directions[j + 1] = std::shared_ptr<DirectionHolder>(new DirectionHolder(direction, directions[j + 2]));
+            update_directions(j + 1, direction, j + 2);
           if (direction == Down) 
-            directions[j + 1] = std::shared_ptr<DirectionHolder>(new DirectionHolder(direction, directions[j]));
+            update_directions(j + 1, direction, j);
      
           if (holder[j + 1] <= min_value) {
             min_value = holder[j + 1];
@@ -73,20 +90,24 @@ class DistanceEstimator{
         }
     
         if (min_value >= k)
-            return std::make_pair(-1, &backtracing_path);
-        }
-        //  min_position = std::min(2*k, (int)(str_b.size() + k - str_a.size() - 1));
-        if (min_value >= k)
-            return std::make_pair(-1, &backtracing_path);
+          return std::make_pair(-1, backtracing_path);
+      }
+      //  min_position = std::min(2*k, (int)(str_b.size() + k - str_a.size() - 1));
+      if (min_value >= k)
+          return std::make_pair(-1, backtracing_path);
       //backtracing begins here
-        std::shared_ptr<DirectionHolder> last_dir = directions[min_position];
-        while (last_dir != NULL) {
-          backtracing_path.push_back(last_dir->last_direction);
-          last_dir = last_dir->previous;
+      std::shared_ptr<DirectionHolder> last_dir = directions[min_position];
+      while (last_dir != NULL) {
+        if (backtracing_path.size() > 0 && backtracing_path.back().first == last_dir->last_direction) {
+          backtracing_path.back().second += last_dir->count;
+        } else {
+          backtracing_path.push_back(std::make_pair(last_dir->last_direction, last_dir->count));
         }
-       //backtracing ends here
+        last_dir = last_dir->previous;
+      }
+      //backtracing ends here
 
-       return std::make_pair(min_value, &backtracing_path);  
+      return std::make_pair(min_value, backtracing_path);  
     }
 
   protected:  
@@ -151,16 +172,20 @@ class DistanceEstimator{
     struct DirectionHolder{
       ArrowDirection last_direction;
       std::shared_ptr<DirectionHolder> previous;
+      int count;
       DirectionHolder(): last_direction(Invalid) {
         previous = NULL;
+        count = 0;
       }
-      DirectionHolder(ArrowDirection direction, std::shared_ptr<DirectionHolder> prev): last_direction(direction), previous(prev) {
+      DirectionHolder(ArrowDirection direction, std::shared_ptr<DirectionHolder> prev): last_direction(direction), previous(prev), count(1) {
       }
     };
+
   private:
     int k;
     std::vector<int> holder;
     std::vector<std::shared_ptr<DirectionHolder> > directions;
+    //std::vector<DirectionHolder> directions_list;// helper construction to delete all pointers to directions without segmentation faults
     std::vector<ArrowDirection> backtracing_path;
 
 };
