@@ -100,7 +100,7 @@ void find_sequences(std::string const &str) {
 void find_sequences2(std::string const& str, Hasher& hasher) {
   start_i = 0; start_j = 1;
   length = 1;
-  if (str.size() <= 3) {
+  if (str.size() < 2) {
     length = 0;
     return;
   }
