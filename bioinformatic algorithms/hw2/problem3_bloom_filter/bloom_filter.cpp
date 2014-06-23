@@ -2,18 +2,18 @@
 
 void BloomFilter::setBytes(std::string const &kmer) {
   for (std::vector<HashFunction>::iterator iter = hash_functions.begin(); iter != hash_functions.end(); ++iter) {
-    int h = (*iter).getValue(kmer);
+    size_t h = (*iter).getValue(kmer);
     setBytes(h);
   }
 }
 
-void BloomFilter::setBytes(int value) {
-  if (value < static_cast<int>(_bits.size()) && value >= 0)
+void BloomFilter::setBytes(size_t value) {
+  if (value < _bits.size())
     _bits[value] = true;
 }
 
-bool BloomFilter::getBytes(int value) {
-  if (value < static_cast<int>(_bits.size()) && value >= 0) {
+bool BloomFilter::getBytes(size_t value) {
+  if (value < _bits.size()) {
     return _bits[value];
   }
   return false;
@@ -22,7 +22,7 @@ bool BloomFilter::getBytes(int value) {
 void BloomFilter::constructHashFunctions(int kmer_size) {
   //we construct hash functions, _k equals _m/n*log(2)
   hash_functions.clear();
-  for (int i = 0; i < _k ; i++) {
+  for (size_t i = 0; i < _k ; i++) {
     HashFunction hash(_m, kmer_size);
     while (true) {
       bool has_duplicated = false;
@@ -38,12 +38,12 @@ void BloomFilter::constructHashFunctions(int kmer_size) {
   }
 }
 
-int BloomFilter::findPrimeNextTo(int k) {
+size_t BloomFilter::findPrimeNextTo(size_t k) {
   bool prime = true;
-  int current_candidate = k;
+  size_t current_candidate = k;
   while (true) {
     prime = current_candidate % 2 != 0;
-    for (int i = 3; i <= current_candidate/2; i += 2) {
+    for (size_t i = 3; i <= current_candidate/2; i += 2) {
       if (current_candidate % i == 0) {
         prime = false;
         break;
@@ -70,7 +70,7 @@ double BloomFilter::getProbability() {
 bool BloomFilter::isKmerInString(std::string const & tested_sample) {
   bool result = true;
   for (std::vector<HashFunction>::iterator iter = hash_functions.begin(); iter != hash_functions.end(); ++iter) {
-    int h = (*iter).getValue(tested_sample);
+    size_t h = (*iter).getValue(tested_sample);
     result &= getBytes(h);
   }
   return result;

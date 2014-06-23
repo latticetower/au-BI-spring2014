@@ -1,36 +1,37 @@
 #pragma once
 #include <vector>
 #include <cmath>
+#include <iostream>
 #include "hash_functions.h"
 #include "helper_functions.h"
 
 class BloomFilter {
-  int _n;
+  size_t _n;
   double _probability;
-  int _m;
-  int _k;
+  size_t _m;
+  size_t _k;
   int _kmer_size;
   std::vector<HashFunction> hash_functions;
   std::vector<bool> _bits;//inner bits container
 
-  void setBytes(std::string const &kmer);
+  void setBytes(std::string const& kmer);
 
   //functions set bytes in bloom filter for given integer value, gets called by setBytes(std::string const &kmer)
-  void setBytes(int value);
+  void setBytes(size_t value);
 
-  bool getBytes(int value);
+  bool getBytes(size_t value);
 
   void constructHashFunctions(int kmer_size);
 
-  int findPrimeNextTo(int k);
+  size_t findPrimeNextTo(size_t k);
 
 public:
-  BloomFilter(int n, int samples_count, int kmer_size): _n(n), _probability(0.05), _kmer_size(kmer_size) {
-    _m = findPrimeNextTo(static_cast<int>(-1.0*n*log(_probability)/(log(2.0)*log(2.0))));
-    _k = static_cast<int>(ceil(1.0*_m/_n*log(2.0)));
+  BloomFilter(size_t n, int samples_count, int kmer_size): _n(n), _probability(0.1), _kmer_size(kmer_size) {
+    _m = findPrimeNextTo(static_cast<size_t>(-1.0*n*log(_probability)/(log(2.0)*log(2.0))));
+    _k = static_cast<size_t>(ceil(1.0*_m/_n*log(2.0)));
     _bits.resize(_m, false);
     constructHashFunctions(kmer_size);
-    _probability = pow(1 - exp(- 1.0*_k*_n/_m), _k);
+    _probability = pow(1 - exp(- 1.0*_k*_n/_m), (int)_k);
   }
 
   //set up some bits in bloom filter

@@ -67,6 +67,9 @@ class RevComplHasher {
         size_t pos = get_substr(median_length, last_pos);
         return (pos < string_size? get_max_substr(median_length, max_length, pos) : get_max_substr(min_length, median_length, -1));
       }
+      if (last_pos > string_size) 
+        return std::make_pair(get_substr(min_length, last_pos), min_length);
+      else
       return std::make_pair(last_pos, min_length);
     }
     

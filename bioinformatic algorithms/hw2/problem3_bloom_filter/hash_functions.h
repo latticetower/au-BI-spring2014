@@ -4,16 +4,16 @@
 
 // class incapsulates hash function logic
 class HashFunction{
-  int _modulo;
-  int _keys_count;
-  std::vector<int> coefficients;
+  size_t _modulo;
+  size_t _keys_count;
+  std::vector<size_t> coefficients;
 
   void generateCoefficients();
 public:
-  HashFunction(int modulo, int keys_count): _modulo(modulo), _keys_count(keys_count) {
+  HashFunction(size_t modulo, size_t keys_count): _modulo(modulo), _keys_count(keys_count) {
     generateCoefficients();
   }
   void regenerateCoefficients();
-  int getValue(std::string  const & kmer);
+  size_t getValue(std::string  const & kmer);
   bool operator == (HashFunction const& hash);
 };

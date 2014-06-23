@@ -9,8 +9,7 @@
 
 StringContainer get_kmers(std::string &sample_string, int kmer_size) {
   StringContainer kmers_container;
-  
-  for (int i = 0; i < static_cast<int>(sample_string.size()) - kmer_size + 1; i ++) {
+  for (size_t i = 0; i < sample_string.size() - kmer_size + 1; i ++) {
     kmers_container.insert(sample_string.substr(i, kmer_size));
   }
   return kmers_container;
@@ -28,7 +27,7 @@ bool read_second_file(char const *input_filename, int& kmer_size, std::vector<st
     std::getline(input_file2, buffer);
     buffer.erase(std::remove_if(buffer.begin(), buffer.end(), ::iscntrl), buffer.end());//removes carriage return from buffer - just in case
     std::transform(buffer.begin(), buffer.end(), buffer.begin(), ::tolower);
-    if (buffer.size() > 0)
+    if ((int)buffer.size() == kmer_size)
       test_samples.push_back(buffer);
   }
   input_file2.close();
@@ -46,6 +45,7 @@ int main(int argc, char**argv) {
     std::cout << "Please, provide _valid_ file name as first parameter" << std::endl;
     return 0;
   }
+
   //read data from second file:
   int kmer_size;
   std::vector<std::string > test_samples;
@@ -71,14 +71,20 @@ int main(int argc, char**argv) {
   std::vector<int> results;
   int fp_count = 0;
   for (std::vector<std::string>::iterator iter = test_samples.begin(); iter != test_samples.end(); ++iter) {
+    //std::cout << "kmer # ";
     if (bloom_filter.isKmerInString(*iter)) {
       results.push_back(1);
-      if (kmers_container.find(*iter) == kmers_container.end())
+      if (kmers_container.find(*iter) == kmers_container.end()) {
         fp_count ++;
+      }
+      else {
+    //      std::cout << "kmer was found";
+      }
     }
     else {
       results.push_back(0);
     }
+    //std::cout << std::endl;
   }
   output_file << "FP = " << 100.0*fp_count/results.size() << " % " << std::endl;
   for (std::vector<int>::iterator iter = results.begin(); iter != results.end(); ++iter) {
