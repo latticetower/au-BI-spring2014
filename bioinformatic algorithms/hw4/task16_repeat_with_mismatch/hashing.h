@@ -64,7 +64,7 @@ class Hasher {
       }
     }
 
-    // value is the value for which we construct hash.
+    // value is the value for witch we construct hash.
     // length is the current hash 
     std::set<size_t> get_all_with_one_mismatch(size_t value, size_t power, size_t length) {
       std::set<size_t> result;
