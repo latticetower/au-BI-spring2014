@@ -80,19 +80,7 @@ void find_sequences(std::string const &str) {
         }
       }
     }
-    /*if (candidate_positions.size() > 1) {
-      for (std::vector<size_t>::iterator iter = candidate_positions.begin(); iter!= candidate_positions.end()-1; ++iter) {
-        for (std::vector<size_t>::iterator iter2 = iter + 1; iter2 != candidate_positions.end(); ++iter2) {
-          size_t len = check_length2(str, *iter, *iter2, length);
-          if (len > length) {
-            length = len;
-            start_i = *iter;
-            start_j = *iter2;
-          }
-        }
-      }
-      candidate_positions.clear();
-    }*/
+   
   }
   
 }
@@ -107,35 +95,18 @@ void find_sequences2(std::string const& str, Hasher& hasher) {
   
   //std::vector<size_t> candidate_positions;
   for (size_t i = 0; i < std::min(str.size() - 2*length + 1, str.size()); i++) {
-    size_t divider = i + length;
-    size_t length0 = length; // need this to correctly iterate through inner cycle
-    for (size_t j = hasher.get_next(i, divider, 0, 1); j < std::min(str.size() - length0 + 1, str.size()); j = hasher.get_next(i, divider, j, length0)) {
+    //size_t divider = i + length;
+    //size_t length0 = length; // need this to correctly iterate through inner cycle
+    //following string was used for optimizations in iteration process:
+    //for (size_t j = hasher.get_next(i, divider, 0, 1); j < std::min(str.size() - length0 + 1, str.size()); j = hasher.get_next(i, divider, j, length0)) {
+    for (size_t j = i + length; j < std::min(str.size() - length + 1, str.size()); j ++) {
       size_t len = hasher.CheckLength(i, j, length);
       if (len > length) {
         length = len;
         start_i = i;
         start_j = j;
-        //candidate_positions.clear();
       }
-      /*else {
-        if (len == length) {
-          candidate_positions.push_back(j);
-        }
-      }*/
     }
-    /*if (candidate_positions.size() > 1) {
-      for (std::vector<size_t>::iterator iter = candidate_positions.begin(); iter!= candidate_positions.end()-1; ++iter) {
-        for (std::vector<size_t>::iterator iter2 = iter + 1; iter2 != candidate_positions.end(); ++iter2) {
-          size_t len = hasher.CheckLength(*iter, *iter2, length);
-          if (len > length) {
-            length = len;
-            start_i = *iter;
-            start_j = *iter2;
-          }
-        }
-      }
-      candidate_positions.clear();
-    }*/
     //
   }
   

@@ -97,12 +97,14 @@ class DistanceEstimator{
           return std::make_pair(-1, backtracing_path);
       //backtracing begins here
       std::shared_ptr<DirectionHolder> last_dir = directions[min_position];
+      size_t prev_count = -1;
       while (last_dir != NULL) {
         if (backtracing_path.size() > 0 && backtracing_path.back().first == last_dir->last_direction) {
-          backtracing_path.back().second += last_dir->count;
+          backtracing_path.back().second += std::min(last_dir->count, prev_count);
         } else {
-          backtracing_path.push_back(std::make_pair(last_dir->last_direction, last_dir->count));
+          backtracing_path.push_back(std::make_pair(last_dir->last_direction, std::min(last_dir->count, prev_count)));
         }
+        prev_count = last_dir->prev_count;
         last_dir = last_dir->previous;
       }
       //backtracing ends here
@@ -172,12 +174,15 @@ class DistanceEstimator{
     struct DirectionHolder{
       ArrowDirection last_direction;
       std::shared_ptr<DirectionHolder> previous;
-      int count;
+      size_t count, prev_count;
       DirectionHolder(): last_direction(Invalid) {
         previous = NULL;
         count = 0;
       }
-      DirectionHolder(ArrowDirection direction, std::shared_ptr<DirectionHolder> prev): last_direction(direction), previous(prev), count(1) {
+      DirectionHolder(ArrowDirection direction, std::shared_ptr<DirectionHolder> prev): last_direction(direction), previous(prev), count(1), prev_count(0) {
+        if (prev != NULL) {
+          prev_count = prev->count;
+        }
       }
     };
 

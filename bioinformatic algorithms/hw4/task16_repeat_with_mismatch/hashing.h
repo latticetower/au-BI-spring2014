@@ -30,13 +30,13 @@ class Hasher {
       string_size = str.size();
       hash_container.clear();
       hash_container.resize(HASHES_AMOUNT, std::vector<size_t>(string_size, 0));
-      next_positions.resize(HASHES_AMOUNT2);
+      //next_positions.resize(HASHES_AMOUNT2);
 
-      std::vector<std::vector<size_t> > last_positions(HASHES_AMOUNT2);
+      /*std::vector<std::vector<size_t> > last_positions(HASHES_AMOUNT2);
       for (size_t i = 0; i < HASHES_AMOUNT2; i++) {
         last_positions[i].resize(powers[i], -1);
         next_positions[i].resize(string_size, -1);
-      }
+      }*/
 
       for (size_t i = 0; i < string_size; i++) {
         size_t current_letter = get_letter_hash(str[i]);
@@ -50,12 +50,12 @@ class Hasher {
           // set next position
           if (i >= k && k < HASHES_AMOUNT2) {
             std::set<size_t> res = get_all_with_one_mismatch(hash_container[k][i - k], powers[k], k + 1); 
-            for (std::set<size_t>::iterator iter = res.begin(); iter != res.end(); ++iter) {
-              if (last_positions[k][*iter] < string_size && last_positions[k][*iter] < i - k) 
-                next_positions[k][last_positions[k][*iter]] = i - k;
-              last_positions[k][*iter] = i - k;
+            //for (std::set<size_t>::iterator iter = res.begin(); iter != res.end(); ++iter) {
+              //if (last_positions[k][*iter] < string_size && last_positions[k][*iter] < i - k) 
+              //  next_positions[k][last_positions[k][*iter]] = i - k;
               //last_positions[k][*iter] = i - k;
-            }
+              //last_positions[k][*iter] = i - k;
+            //}
             
           }
           //
@@ -80,7 +80,8 @@ class Hasher {
       return result;
     }
 
-    size_t get_next(size_t i, size_t min_pos, size_t last_found, size_t length) {
+  /*
+  size_t get_next(size_t i, size_t min_pos, size_t last_found, size_t length) {
       //std::cout << i << " " << min_pos << " " << last_found << " " << length << std::endl;
       if (i > min_pos) {
         std::cout << "got wrong min_pos" << std::endl;
@@ -120,9 +121,9 @@ class Hasher {
         return next_positions[k - 1][last_found];
       }
       return last_found;
-    } 
+    } */
   private:
-    std::vector<std::vector<size_t> > next_positions;
+    //std::vector<std::vector<size_t> > next_positions;
   public:
     bool CheckEquality(size_t i, size_t j, size_t length, bool allow_mismatch = true) {
       CheckResult ch = CheckEquality1(i, j, length, allow_mismatch);

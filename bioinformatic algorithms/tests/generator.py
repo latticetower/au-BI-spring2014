@@ -16,7 +16,7 @@ def print_to_fasta(list_of_files, output_folder_name, id, len, seq, fname2):
     g.close()
     list_of_files.write(os.path.join(dir_path, output_file_name))
     list_of_files.write(" ")
-    list_of_files.write(os.path.join(fname2, "test_{0}_{1}.out".format(id, len)))
+    list_of_files.write(os.path.join(fname2, "test_{0}_{1}.out.txt".format(id, len)))
     list_of_files.write("\n")
 
 def generate(folder, outfolder_name, max_len):
