@@ -11,4 +11,6 @@ a
 >seq6 
 aaa
 >seq7
-
+gtgt
+>seq8
+GAAC

@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
     output_file << ">" << iter->first << std::endl;
     std::set<size_t> positions = builder.find(iter->second);
     if (positions.size() == 0) {
-      output_file << "no occurences found";
+      output_file << "no occurences were found";
     }
     for (std::set<size_t>::iterator iter2 = positions.begin(); iter2 != positions.end(); ++iter2) {
       output_file << *iter2 << '\t';
