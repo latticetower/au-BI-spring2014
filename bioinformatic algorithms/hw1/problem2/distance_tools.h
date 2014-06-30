@@ -67,6 +67,7 @@ class DistanceEstimator{
     }
   public:
     LevenshteinInfo levenshtein_dist_info(std::string const& str_a, std::string const& str_b) {
+      std::cout << "start operation: " << time(NULL) << std::endl;
       if (str_a.size() < str_b.size())
         return levenshtein_dist_info(str_b, str_a);
 
@@ -101,11 +102,9 @@ class DistanceEstimator{
       
       if (holder[min_position] >= k)
           return LevenshteinInfo();
+      std::cout << "before backtracing\n" << time(NULL);
       //do some actual backtracing and return:
-      LevenshteinInfo info;
-      load_backtracing_path(info, min_position, directions);
-      
-      return info;  
+      return load_backtracing_path(min_position, directions);
     }
 
   protected:  
@@ -127,7 +126,8 @@ class DistanceEstimator{
       return current_index - 1;
     }
 
-    void load_backtracing_path(LevenshteinInfo& info, int min_position, std::vector<std::shared_ptr<DirectionHolder> > & directions) {
+    LevenshteinInfo & load_backtracing_path(int min_position, std::vector<std::shared_ptr<DirectionHolder> > & directions) {
+      LevenshteinInfo info;
       std::shared_ptr<DirectionHolder> last_dir = directions[min_position];
       size_t prev_count = -1;
       while (last_dir != NULL) {
@@ -141,6 +141,7 @@ class DistanceEstimator{
         last_dir = last_dir->previous;
       }
       info.distance = holder[min_position];
+      return info;
     }
 
     //updates specified array value based on neighbour values and match/mismatch costs

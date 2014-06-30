@@ -82,12 +82,13 @@ int main(int argc, char** argv) {
   std::ofstream output_file(argv[2]);
   DistanceEstimator estimator(100);
   
-  LevenshteinInfo result = estimator.levenshtein_dist_info(fasta.data[0].second, fasta.data[1].second);
+  LevenshteinInfo & result = estimator.levenshtein_dist_info(fasta.data[0].second, fasta.data[1].second);
+  std::cout << "after backtracing " << time(NULL) << std::endl;
   if (result.distance >= 0)
     output_file //<< result.first << std::endl 
     << get_result_string2(fasta.data[0].second, fasta.data[1].second, result.backtracing_path, 1) << std::endl 
     << get_result_string2(fasta.data[0].second, fasta.data[1].second, result.backtracing_path, 2);
-  else output_file<< "not similar";
+  else output_file << "not similar";
   output_file.close();
   return 0;
 }
