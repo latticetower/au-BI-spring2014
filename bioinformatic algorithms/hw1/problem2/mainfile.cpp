@@ -87,11 +87,9 @@ int main(int argc, char** argv) {
     DistanceEstimator estimator(k);
     long long start_time = time(NULL);
 
-
     LevenshteinInfo const & result = estimator.levenshtein_dist_info(fasta.data[0].second, fasta.data[1].second);
-    //std::cout << result.distance << " " << fasta.data[0].second.size() << std::endl << fasta.data[1].second.size() << std::endl;
     long long end_time = time(NULL);
-    std::cout << "time elapsed (without backtracing) " << (end_time - start_time)*1.0/60 << std::endl;
+    std::cout << "time elapsed (without backtracing, minutes) " << (end_time - start_time)*1.0/60 << std::endl;
 
     if (result.distance < k)
         output_file //<< result.first << std::endl
@@ -101,6 +99,6 @@ int main(int argc, char** argv) {
     output_file.close();
 
     end_time = time(NULL);
-    std::cout << "time elapsed " << (end_time - start_time)*1.0/60 << std::endl;
+    std::cout << "Total time elapsed (minutes): " << (end_time - start_time)*1.0/60 << std::endl;
     return 0;
 }
