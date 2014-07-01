@@ -127,16 +127,14 @@ class Hasher {
       if (chars_equal(i + expected_length, j + expected_length)) {
         return FindLength(i, j, j, true);
       }
-      else {
-        if (j + expected_length + 1 >= string_size)
-          return FindLength(i, j, j, allow_mismatch);
-        if (i + expected_length + 1 == j)
-          return FindLength(i, j, j, allow_mismatch);
-        if (allow_mismatch && chars_equal(i + expected_length + 1, j + expected_length + 1)) {
-          return FindLength(i, j, j, allow_mismatch);
-        }
-        return 0;
-      }
+      
+      if (j + expected_length + 1 >= string_size)
+        return FindLength(i, j, j, allow_mismatch);
+      if (i + expected_length + 1 == j)
+        return FindLength(i, j, j, allow_mismatch);
+      if (allow_mismatch && chars_equal(i + expected_length + 1, j + expected_length + 1)) 
+        return FindLength(i, j, j, allow_mismatch);
+      
       return 0;
 
     }
