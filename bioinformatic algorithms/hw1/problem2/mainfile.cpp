@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
   fasta.loadFromStream(inputStream);
   inputStream.close();
 
-  size_t k = 100;
+  size_t k = 3;
 
   std::ofstream output_file(argv[2]);
   DistanceEstimator estimator(k);

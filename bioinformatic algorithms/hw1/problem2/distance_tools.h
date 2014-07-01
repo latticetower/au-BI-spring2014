@@ -85,39 +85,45 @@ class DistanceEstimator{
             std::string const & str_a,
             std::string const & str_b
             ) {
-        std::cout << "start operation: " << time(NULL) << std::endl;
+        //std::cout << "start operation: " << time(NULL) << std::endl;
         if (str_a.size() < str_b.size())
             return levenshtein_dist_info(str_b, str_a);
 
         holder.resize(2*k + 1, 0);
         directions.resize(2*k + 1, NULL);
         //initialization
-        size_t min_position = 0;
+        size_t min_position = 0, min_value = 0;
         init_vectors(directions, holder);
         info.clear();
         //long long start_time = time(NULL);
         //long long end_time = 0;
         size_t i = 0;
+        size_t j_min, j_max;
         for (i = 0; i < str_a.size(); i++) {
 
-            size_t j = k - i - 1;
+            j_min = std::max(k - i - 1, min_value);
+            j_max = std::min(2*k - 1 - min_value, str_b.size() + k - i - 1);
 
             if (i >= k) {
-                j = 0;
+                j_min = min_value;
                 set_value_and_update_direction(holder, i, -1, k, str_a, str_b);
             }
-            min_position = j;
-
-            for ( ; j < std::min(2*k - 1, str_b.size() + k - i - 1); j ++) {
+            min_position = j_min;
+            min_value = holder[min_position];
+            if (j_max >= j_min)
+                return info;
+            for (size_t j = j_min; j < j_max; j ++) {
                 set_value_and_update_direction(holder, i, j, k, str_a, str_b);
-                if (holder[j + 1] <= holder[min_position])
+                if (holder[j + 1] <= holder[min_position]){
                     min_position = j + 1;
+                    min_value = holder[min_position];
+                }
             }
-            if (holder[min_position] >= k)
+            if (min_value >= k)
                 return info;
         }
 
-        if (holder[min_position] >= k)
+        if (min_value >= k)
             return info;
         return load_backtracing_path(info, min_position, directions);
     }
