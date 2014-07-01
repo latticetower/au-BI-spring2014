@@ -9,11 +9,10 @@
 #include "distance_tools.h"
 
 
-
 std::string get_result_string(std::string const & str,
-                                      BacktracingPath const & path,
-                                      int n) {
-  std::string buffer = ""; 
+                              BacktracingPath const & path,
+                              int n) {
+  std::string buffer = "";
   size_t i = 0;
   for (BacktracingPath::const_reverse_iterator iter = path.rbegin(); iter != path.rend(); ++iter) {
       if (iter->direction == Match) {
@@ -63,9 +62,9 @@ std::string get_result_string2(std::string const& str_a,
                                std::string const& str_b,
                                BacktracingPath const& path,
                                int n) {
-  if (str_a.size() < str_b.size())
-    return get_result_string2(str_b, str_a, path, n);
-  return get_result_string((n == 1 ? str_a : str_b), path, n);
+    if (str_a.size() < str_b.size())
+        return get_result_string2(str_b, str_a, path, n);
+    return get_result_string((n == 1 ? str_a : str_b), path, n);
 }
 
 int main(int argc, char** argv) {
@@ -93,8 +92,7 @@ int main(int argc, char** argv) {
     std::cout << "time elapsed (without backtracing, minutes) " << (end_time - start_time)*1.0/60 << std::endl;
 
     if (result.distance < k)
-        output_file //<< result.first << std::endl
-        << get_result_string2(fasta.data[0].second, fasta.data[1].second, result.backtracing_path, 1) << std::endl
+        output_file << get_result_string2(fasta.data[0].second, fasta.data[1].second, result.backtracing_path, 1) << std::endl
         << get_result_string2(fasta.data[0].second, fasta.data[1].second, result.backtracing_path, 2);
     else output_file << "not similar";
     output_file.close();
