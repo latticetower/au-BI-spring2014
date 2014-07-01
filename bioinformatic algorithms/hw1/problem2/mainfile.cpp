@@ -8,11 +8,12 @@
 #include "fasta_data.h"
 #include "distance_tools.h"
 
-std::string buffer = "";
 
-std::string const & get_result_string(std::string const & str,
+
+std::string get_result_string(std::string const & str,
                                       BacktracingPath const & path,
                                       int n) {
+  std::string buffer = ""; 
   size_t i = 0;
   for (BacktracingPath::const_reverse_iterator iter = path.rbegin(); iter != path.rend(); ++iter) {
       if (iter->direction == Match) {
@@ -58,7 +59,7 @@ std::string const & get_result_string(std::string const & str,
     return buffer;
 }
 
-std::string const & get_result_string2(std::string const& str_a,
+std::string get_result_string2(std::string const& str_a,
                                std::string const& str_b,
                                BacktracingPath const& path,
                                int n) {

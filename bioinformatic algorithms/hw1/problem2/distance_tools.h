@@ -219,7 +219,7 @@ class DistanceEstimator{
               size_t const & j_max
               ) const {
         ArrowDirection direction = Match;
-        if (j + 1 >= j_max || j + 1 < j_min)
+        if ((j + 1 >= j_max && j_max > k) || j + 1 < j_min)
             return Invalid;
         size_t new_val = holder[j + 1] + match(str_a[i], str_b[j - k + i + 1]);
         if (j >= j_min && j < j_max && holder[j] + GAP_COST < new_val) {
