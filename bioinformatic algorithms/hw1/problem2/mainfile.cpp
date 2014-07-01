@@ -6,7 +6,7 @@
 #include <memory>
 #include <locale>
 #include "fasta_data.h"
-#include"distance_tools.h"
+#include "distance_tools.h"
 
 
 std::string get_result_string(std::string const & str,
@@ -89,7 +89,10 @@ int main(int argc, char** argv) {
   DistanceEstimator estimator(k);
   long long start_time = time(NULL);
 
+
   LevenshteinInfo const & result = estimator.levenshtein_dist_info(fasta.data[0].second, fasta.data[1].second);
+  //std::cout << result.distance << " " << fasta.data[0].second.size() << std::endl << fasta.data[1].second.size() << std::endl;
+
   if (result.distance < k)
     output_file //<< result.first << std::endl
     << get_result_string2(fasta.data[0].second, fasta.data[1].second, result.backtracing_path, 1) << std::endl

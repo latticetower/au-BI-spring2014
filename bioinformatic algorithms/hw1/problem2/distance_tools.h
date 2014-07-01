@@ -207,45 +207,6 @@ class DistanceEstimator{
         update_directions(j + 1, direction);
     }
 
-    // resets previously updated value (method reverses cell value modified by set_value)
-    // method is not used, because it turned out that there is ambiguity in backtracing with 1-dim array
-    // so, instead of using it array of pointers to directions is used (in main levenshtein dist method)
-    ArrowDirection reset_value(
-            std::vector<size_t> & holder,
-            size_t i, size_t j, size_t k,
-            std::string const & str_a,
-            std::string const & str_b
-            ) {
-        if (j + 1 >= holder.size())
-            return Invalid;
-
-        size_t preffered_index = j + 1;
-        if (j + 2 >= holder.size()) {
-            preffered_index = j;
-        }
-        else {
-            if (j >= holder.size()) {
-                preffered_index = j + 2;
-            } else {
-                preffered_index = (holder[j + 2] < holder[j] ? j + 2 : j);
-            }
-        }
-        ArrowDirection direction = (preffered_index == j ? Down : Left);
-
-        if (match(str_a[i], str_b[j - k + i + 1]) == 0) {
-            if (holder[j + 1] <= holder[preffered_index] + GAP_COST) {
-                //holder[j + 1] = holder[j + 1] - match(str_a[i], str_b[j - k + i + 1]);
-                direction = Match;
-            }
-        }
-        else {
-            if (holder[j + 1] < holder[preffered_index] + GAP_COST && holder[j + 1] >= match(str_a[i], str_b[j - k + i + 1])) {
-                holder[j + 1] = holder[j + 1] - match(str_a[i], str_b[j - k + i + 1]);
-                direction = Match;
-            }
-        }
-        return direction;
-    }
 
   private:
     size_t k;
