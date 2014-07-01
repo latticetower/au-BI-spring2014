@@ -6,6 +6,8 @@
 #include <memory>
 #include <locale>
 
+#define KMAX 100
+
 enum ArrowDirection{ Match, Left, Down, Invalid };
 
 struct DirectionHolder{
@@ -58,19 +60,36 @@ class DistanceEstimator{
     static const size_t MISMATCH_COST = 1;
 
     // arrow directions for backtracing
-    inline size_t match(char const & a, char const & b) {
+    inline size_t match(char const & a, char const & b) const {
         //return (std::tolower(a) == std::tolower(b) ? 0 : MISMATCH_COST);
         return (a == b ? 0 : MISMATCH_COST);
     }
 
-    DistanceEstimator(size_t k_): k(k_) {  }
+    DistanceEstimator(size_t k_): k(k_) {
+        holder = new size_t[2 * k + 1]();
+        directions = new std::shared_ptr<DirectionHolder>[2 * k + 1];
+    }
 
-    ~DistanceEstimator() {  }
+    ~DistanceEstimator() {
+        delete [] holder;
+        delete [] directions;
+    }
 
   private:
-    inline void update_directions(size_t const & index,
-                                  ArrowDirection const & direction
-                                  ) {
+
+    template <ArrowDirection direction>
+    void update_directions(size_t const & index) {
+        size_t link_to = get_index(index, direction);
+        directions[index] = std::shared_ptr<DirectionHolder>(
+                              new DirectionHolder(
+                                        direction,
+                                        directions[link_to]
+                                        )
+                            );
+    }
+
+
+    inline void update_directions(size_t const & index, ArrowDirection const & direction) {
         if (direction == Invalid)
             return;
         size_t link_to = get_index(index, direction);
@@ -89,6 +108,7 @@ class DistanceEstimator{
                             );
     }
 
+
   public:
 
     LevenshteinInfo const & levenshtein_dist_info(
@@ -99,8 +119,8 @@ class DistanceEstimator{
         if (str_a.size() < str_b.size())
             return levenshtein_dist_info(str_b, str_a);
 
-        holder.resize(2*k + 1, 0);
-        directions.resize(2*k + 1, NULL);
+        //holder.resize(2*k + 1, 0);
+        //directions.resize(2*k + 1, NULL);
         //initialization
         size_t min_position = 0, min_value = 0;
         init_vectors(/*directions, holder*/);
@@ -149,8 +169,8 @@ class DistanceEstimator{
             holder[kprev] = holder[kprev + 1] + GAP_COST;
             holder[knext] = holder[knext - 1] + GAP_COST;
 
-            update_directions(knext, Down);
-            update_directions(kprev, Left);
+            update_directions<Down>(knext);
+            update_directions<Left>(kprev);
         }
     }
 
@@ -197,7 +217,7 @@ class DistanceEstimator{
               std::string const & str_b,
               size_t const & j_min,
               size_t const & j_max
-              ) {
+              ) const {
         ArrowDirection direction = Match;
         if (j + 1 >= j_max || j + 1 < j_min)
             return Invalid;
@@ -222,13 +242,13 @@ class DistanceEstimator{
             size_t const & j_min,
             size_t const & j_max
             ) {
-        ArrowDirection direction = set_value(/*holder,*/ i, j, k, str_a, str_b, j_min, j_max);
+        ArrowDirection const & direction = set_value(/*holder,*/ i, j, k, str_a, str_b, j_min, j_max);
         update_directions(j + 1, direction);
     }
 
   private:
     size_t k;
-    std::vector<size_t> holder;
-    std::vector<std::shared_ptr<DirectionHolder> > directions;
+    size_t * holder;
+    std::shared_ptr<DirectionHolder> * directions;
     LevenshteinInfo info;
 };
