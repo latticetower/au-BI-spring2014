@@ -110,7 +110,7 @@ class DistanceEstimator{
             }
             min_position = j_min;
             min_value = holder[min_position];
-            if (j_max >= j_min)
+            if (j_max <= j_min)
                 return info;
             for (size_t j = j_min; j < j_max; j ++) {
                 set_value_and_update_direction(holder, i, j, k, str_a, str_b);
