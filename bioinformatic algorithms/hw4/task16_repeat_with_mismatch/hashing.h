@@ -42,10 +42,7 @@ class Hasher {
           else {
             hash_container[k][0] = (hash_container[k][0] << ALPHABET_POWER) ^ current_letter;
           }
-          // set next position
-          if (i >= k && k < HASHES_AMOUNT2) {
-            std::set<size_t> res = get_all_with_one_mismatch(hash_container[k][i - k], powers[k], k + 1);             
-          }
+          
           //
         }
        
