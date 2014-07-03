@@ -12,7 +12,7 @@ to lexical_cast(from const &x) {
   to ret;
   os << x;
   os >> ret;
-  return ret;  
+  return ret;
 }
 
 class EnergiesInfo {
@@ -21,7 +21,7 @@ class EnergiesInfo {
     static const int INF = 10000;
 
     enum RNANucleotide{A, C, G, U};
-    enum Structure{Bulge, Hairpin, InternalLoop, None, BulgeOrLoop, Stacked, Composed, ComposedVM, Simple};
+    enum Structure{Bulge, Hairpin, InternalLoop, None, BulgeOrLoop, Stacked, Composed, ComposedVM, Shift};
 
     void LoadFromFile(std::string const&filename) {
       std::ifstream f(filename);
@@ -42,9 +42,9 @@ class EnergiesInfo {
 
     double get(char a1, char a2, char b1, char b2) const {
       std::map<NucleotidePair, std::map<NucleotidePair, double> >::const_iterator iter = free_energies.find(getNucleotidePair(a1, a2));
-      if (iter == free_energies.end()) 
+      if (iter == free_energies.end())
         return INF;
-      if (iter->second.find(getNucleotidePair(b1, b2)) == iter->second.end()) 
+      if (iter->second.find(getNucleotidePair(b1, b2)) == iter->second.end())
         return INF;
       return iter->second.at(getNucleotidePair(b1, b2));
     }
@@ -87,7 +87,7 @@ class EnergiesInfo {
       return true;
     }
 
-    
+
   protected:
 
     std::vector<std::string> parse(std::string const &str, char delimiter) {
@@ -102,8 +102,8 @@ class EnergiesInfo {
       result.push_back(str.substr(start, end));
       return result;
     }
-    
-   
+
+
   private:
     typedef std::pair<RNANucleotide, RNANucleotide> NucleotidePair;
 
@@ -123,10 +123,11 @@ class EnergiesInfo {
         return RNANucleotide::G;
       if (ch == 'u' || ch == 'U')
         return RNANucleotide::U;
+      return RNANucleotide::U;
     }
 
 
-    
+
     std::map<NucleotidePair, std::map<NucleotidePair, double> > free_energies;
     std::map<Structure, std::map<int, double> > structure_energies;
 };

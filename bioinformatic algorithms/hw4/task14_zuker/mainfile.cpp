@@ -25,8 +25,12 @@ int main(int argc, char** argv){
   EnergiesInfo ei;
   ei.LoadFromFile("energies.txt");
   RNAEnergiesPredictor zuker_predictor(ei);
+  std::ofstream g("debug_info.txt");
+  
   zuker_predictor.ProcessSeq(fasta.data[0].second);
   std::cout << "opt energy is " << zuker_predictor.getEnergy() << std::endl;
+  zuker_predictor.debug_print_matrices(g);//need some debug info to ensure all is fine
+  g.close();
   std::ofstream output_file(argv[2]);
   if (fasta.data[0].second.size() < 1) {
     output_file << "sequence size is invalid";
